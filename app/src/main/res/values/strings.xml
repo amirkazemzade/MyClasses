@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">MyClasses</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="add_button">Add Button</string>
+    <string name="back_button">back button</string>
+    <string name="lesson_picture">lesson\'s picture</string>
+    <string name="first_day_of_week">First day of week :</string>
+    <string name="this_week_is">This week is :</string>
+
+    <string-array name="days_of_week_long">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="days_of_week_short">
+        <item>SUN</item>
+        <item>MON</item>
+        <item>TUE</item>
+        <item>WED</item>
+        <item>THU</item>
+        <item>FRI</item>
+        <item>SAT</item>
+    </string-array>
+
+    <string-array name="odd_and_even">
+        <item>EVEN</item>
+        <item>ODD</item>
+    </string-array>
+
+</resources>
