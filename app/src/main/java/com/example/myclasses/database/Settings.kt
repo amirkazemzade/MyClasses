@@ -1,10 +1,10 @@
 package com.example.myclasses.database
 
 import android.content.SharedPreferences
-import java.time.DayOfWeek
 import java.util.*
 
-class Settings(private val pref: SharedPreferences) {
+//TODO: remove setting class if its possible
+class Settings(pref: SharedPreferences) {
     private val edit = pref.edit()
     var evenIsEven = pref.getBoolean("evenIsEven", true)
         set(value) {

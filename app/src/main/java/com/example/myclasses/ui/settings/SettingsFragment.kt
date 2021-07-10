@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -14,13 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.*
 import com.example.myclasses.database.Settings
 import com.example.myclasses.databinding.FragmentSettingsBinding
-import kotlin.math.log
 
 class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var viewModel: SettingsViewModel
+    private lateinit var viewModelFactory: SettingsViewModelFactory
     private var _binding: FragmentSettingsBinding? = null
-    private lateinit var settings: Settings
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,14 +29,13 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        settingsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
+        viewModelFactory = SettingsViewModelFactory(getPreferences())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(SettingsViewModel::class.java)
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        settings = activity?.let { Settings(it.getPreferences(Context.MODE_PRIVATE)) }!!
 
         ArrayAdapter.createFromResource(
             view.context,
@@ -47,7 +44,7 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
         ).also { adapter ->
             binding.daysOfWeek.adapter = adapter
         }
-        binding.daysOfWeek.setSelection(settings.firstDayOfWeek - 1)
+        binding.daysOfWeek.setSelection((viewModel.settings.value?.firstDayOfWeek?.minus(1)!!))
         binding.daysOfWeek.onItemSelectedListener = this
         ArrayAdapter.createFromResource(
             view.context,
@@ -56,7 +53,7 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
         ).also { adapter ->
             binding.oddOrEven.adapter = adapter
         }
-        binding.oddOrEven.setSelection(getOddOrEvenId(settings.isWeekEven))
+        binding.oddOrEven.setSelection(getOddOrEvenId(viewModel.settings.value!!.isWeekEven))
         binding.oddOrEven.onItemSelectedListener = this
     }
 
@@ -67,14 +64,20 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (binding.daysOfWeek.selectedView == view) {
-            settings.firstDayOfWeek = binding.daysOfWeek.selectedItemPosition + 1
-            binding.oddOrEven.setSelection(getOddOrEvenId(settings.isWeekEven))
+            viewModel.settings.value?.firstDayOfWeek = binding.daysOfWeek.selectedItemPosition + 1
+            viewModel.settings.value?.let { getOddOrEvenId(it.isWeekEven) }?.let {
+                binding.oddOrEven.setSelection(it)
+            }
         } else {
-            settings.isWeekEven = (binding.oddOrEven.selectedItemPosition == 0)
+            viewModel.settings.value?.isWeekEven = (binding.oddOrEven.selectedItemPosition == 0)
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
+    }
+
+    private fun getPreferences(): SharedPreferences {
+        return activity?.getPreferences(Context.MODE_PRIVATE)!!
     }
 }

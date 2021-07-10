@@ -1,6 +1,7 @@
 package com.example.myclasses.ui.lesson.`object`
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,18 +28,14 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
         val dataSource =
             activity?.let { LessonsDatabase.getInstance(it.application).lessonsDatabaseDao }!!
 
-        viewModelFactory = LessonObjectViewModelFactory(position, dataSource)
+        viewModelFactory = LessonObjectViewModelFactory(position, dataSource, getPreferences())
         viewModel = ViewModelProvider(this, viewModelFactory).get(LessonObjectViewModel::class.java)
 
         _binding = FragmentClassesOfDayBinding.inflate(inflater, container, false)
 
-        init()
-        binding.weekState.text = viewModel.stateAsString.value
-        binding.date.text = viewModel.date.value
-        binding.dayState.text = viewModel.dayState.value
-
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         backToTodayState()
-
 
 //        val adapter = LessonsListAdapter()
 //        adapter.data = viewModel.todayLessons.value!!
@@ -51,8 +48,8 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
 
     }
 
-    private fun init() {
-        activity?.let { viewModel.init(it.getPreferences(Context.MODE_PRIVATE)) }
+    private fun getPreferences(): SharedPreferences{
+        return activity?.getPreferences(Context.MODE_PRIVATE)!!
     }
 
     private fun backToTodayState() {

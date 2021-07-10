@@ -1,6 +1,7 @@
 package com.example.myclasses.ui.lesson.collection
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +14,13 @@ import com.example.myclasses.databinding.FragmentHomeBinding
 import com.example.myclasses.ui.lesson.`object`.LessonObjectFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
-private const val NUM_OF_PAGES = 14;
+private const val NUM_OF_PAGES = 14
 
 class HomeCollectionFragment : Fragment() {
 
     private lateinit var viewModel: LessonCollectionViewModel
+    private lateinit var viewModelFactory: LessonCollectionViewModelFactory
     private lateinit var pagerAdapter: PagerAdapter
-    private lateinit var settings: Settings
-    private lateinit var days: Array<String>
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -33,14 +33,14 @@ class HomeCollectionFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(LessonCollectionViewModel::class.java)
+        val application = requireNotNull(this.activity).application
+        viewModelFactory = LessonCollectionViewModelFactory(getPreferences(), application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(LessonCollectionViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         pagerAdapter = PagerAdapter(this)
         binding.viewPager.adapter = pagerAdapter
-
-        init()
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, _ ->
             tab.text = viewModel.nexDay.value
@@ -67,12 +67,12 @@ class HomeCollectionFragment : Fragment() {
         }
     }
 
-    private fun init() {
-        activity?.getPreferences(Context.MODE_PRIVATE)?.let { viewModel.init(it, resources) }
-    }
-
     private fun nextDay() {
         viewModel.nextDay()
+    }
+
+    private fun getPreferences(): SharedPreferences {
+        return activity?.getPreferences(Context.MODE_PRIVATE)!!
     }
 }
 

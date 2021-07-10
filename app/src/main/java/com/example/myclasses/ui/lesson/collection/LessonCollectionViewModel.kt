@@ -1,15 +1,16 @@
 package com.example.myclasses.ui.lesson.collection
 
+import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myclasses.R
 import com.example.myclasses.database.Settings
 import java.util.*
 
-class LessonCollectionViewModel : ViewModel() {
+class LessonCollectionViewModel(preferences: SharedPreferences, application: Application) : AndroidViewModel(application) {
 
     private val _settings = MutableLiveData<Settings>()
     val settings: LiveData<Settings>
@@ -31,14 +32,14 @@ class LessonCollectionViewModel : ViewModel() {
     val nexDay: LiveData<String>
         get() = _nextDay
 
-    fun init(pref: SharedPreferences, res: Resources) {
-        _settings.value = Settings(pref)
+    init {
+        _settings.value = Settings(preferences)
 
         loadDayId()
 
         loadTodayTabId()
 
-        loadDays(res)
+        loadDays(application.resources)
         _nextDay.value = nextDayId.value?.let { days.value?.get(it) }
     }
 

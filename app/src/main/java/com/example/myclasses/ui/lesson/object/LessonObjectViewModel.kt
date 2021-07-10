@@ -1,21 +1,23 @@
 package com.example.myclasses.ui.lesson.`object`
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.myclasses.database.Lesson
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.Settings
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class LessonObjectViewModel(private val position: Int, private val dataSource: LessonsDatabaseDao) :
+class LessonObjectViewModel(
+    private val position: Int,
+    private val dataSource: LessonsDatabaseDao,
+    preferences: SharedPreferences
+) :
     ViewModel() {
+
     private var _settings = MutableLiveData<Settings>()
     val settings: LiveData<Settings>
         get() = _settings
@@ -43,9 +45,9 @@ class LessonObjectViewModel(private val position: Int, private val dataSource: L
     val stateAsString: LiveData<String>
         get() {
             return when (_state.value) {
-                1 -> MutableLiveData<String>("EVEN") as LiveData<String>
-                2 -> MutableLiveData<String>("ODD") as LiveData<String>
-                else -> MutableLiveData<String>("EVEN") as LiveData<String>
+                1 -> MutableLiveData("EVEN")
+                2 -> MutableLiveData("ODD")
+                else -> MutableLiveData("EVEN")
             }
         }
 
@@ -53,8 +55,8 @@ class LessonObjectViewModel(private val position: Int, private val dataSource: L
     val todayLessons: LiveData<List<Lesson>>
         get() = _todayLessons
 
-    fun init(pref: SharedPreferences) {
-        _settings.value = Settings(pref)
+    init {
+        _settings.value = Settings(preferences)
 
         loadDate()
 
@@ -67,12 +69,10 @@ class LessonObjectViewModel(private val position: Int, private val dataSource: L
                 if (settings.value?.isWeekEven == true) 2 else 1
             }
 
-        viewModelScope.launch {
-            getTodayLessons()
-        }
+        getTodayLessons() // use coroutine if ui doesn't responds
     }
 
-    private suspend fun getTodayLessons() {
+    private fun getTodayLessons() {
         _todayLessons =
             day.value?.let { state.value?.let { it1 -> dataSource.getTodayLessons(it, it1) } }!!
     }
@@ -85,15 +85,16 @@ class LessonObjectViewModel(private val position: Int, private val dataSource: L
 
         var dif = (todayId - 1 - settings.value?.firstDayOfWeek?.minus(1)!!)
 
-        _dayState.value = when(dif){
-            -1 -> "Yesterday"
-            0 -> "Today"
-            1 -> "Tomorrow"
-            else -> ""
-        }
-
         if (dif < 0) dif += 7
         val todayTabId = (dif) % 7
+
+
+        _dayState.value = when (todayTabId - position) {
+            1 -> "Yesterday"
+            0 -> "Today"
+            -1 -> "Tomorrow"
+            else -> ""
+        }
 
         _dayDifference.value = todayTabId - position
 

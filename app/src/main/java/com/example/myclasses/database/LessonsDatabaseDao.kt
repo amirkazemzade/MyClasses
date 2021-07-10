@@ -7,16 +7,16 @@ import com.example.myclasses.database.Lesson
 @Dao
 interface LessonsDatabaseDao {
     @Insert
-    fun insert(lesson: Lesson)
+    suspend fun insert(lesson: Lesson)
 
     @Update
-    fun update(lesson: Lesson)
+    suspend fun update(lesson: Lesson)
 
     @Delete
-    fun delete(lesson: Lesson)
+    suspend fun delete(lesson: Lesson)
 
     @Query(value = "SELECT * FROM lessons_table WHERE lessonId = :key")
-    fun get(key: Long) : Lesson?
+    suspend fun get(key: Long) : Lesson?
 
     @Query(value = "SELECT * FROM lessons_table ORDER BY lessonId DESC")
     fun getAllLessons() : LiveData<List<Lesson>>
@@ -25,5 +25,5 @@ interface LessonsDatabaseDao {
     fun getTodayLessons(day: Int, state: Int) : LiveData<List<Lesson>>
 
     @Query(value = "DELETE FROM lessons_table ")
-    fun clear()
+    suspend fun clear()
 }
