@@ -1,78 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="4dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="4dp"
-    app:cardCornerRadius="15dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="lesson"
+            type="com.example.myclasses.database.Lesson" />
+    </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/iconCardView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-
-            app:cardCornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:cardCornerRadius="15dp">
 
 
-            <ImageView
-                android:id="@+id/lessonIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/lesson_picture"
-                tools:srcCompat="@tools:sample/avatars" />
-        </androidx.cardview.widget.CardView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/lessonName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/time"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@+id/iconCardView"
-            app:layout_constraintTop_toTopOf="@+id/iconCardView"
-            tools:text="Lesson Name" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/iconCardView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/lessonName"
-            app:layout_constraintTop_toTopOf="@+id/lessonName"
-            tools:text="12:00 - 02:00" />
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars">
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/iconCardView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/lessonName"
-            app:layout_constraintTop_toBottomOf="@+id/lessonName"
-            tools:text="description description  description description description" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+
+                <ImageView
+                    android:id="@+id/lessonIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/lesson_picture"
+                    tools:srcCompat="@tools:sample/avatars"
+                    lessonIcon="@{lesson}"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/lessonName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/time"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/iconCardView"
+                app:layout_constraintTop_toTopOf="@+id/iconCardView"
+                android:text="@{lesson.lessonName}"
+                tools:text="Lesson Name" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/lessonName"
+                app:layout_constraintTop_toTopOf="@+id/lessonName"
+                timeFormatted="@{lesson}"
+                tools:text="12:00 - 02:00" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iconCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/lessonName"
+                app:layout_constraintTop_toBottomOf="@+id/lessonName"
+                android:text="@{lesson.description}"
+                tools:text="description description  description description description" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

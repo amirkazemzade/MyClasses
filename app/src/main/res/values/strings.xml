@@ -22,7 +22,10 @@
     <string name="save">Save</string>
     <string name="description">Description</string>
     <string name="week">Week</string>
-    <string name="defaultIconName">ic_lesson_math</string>
+    <string name="defaultIconName">ic_lesson_0</string>
+    <string name="defaultIconNamePrefix">ic_lesson_</string>
+    <string name="a_picture">a picture</string>
+
 
     <string-array name="days_of_week_long">
         <item>Sunday</item>

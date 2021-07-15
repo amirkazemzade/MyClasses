@@ -1,5 +1,6 @@
 package com.example.myclasses.ui.lesson.newlesson
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,8 @@ import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class NewLessonViewModel(private val day: Int ,private val dataSource: LessonsDatabaseDao) : ViewModel() {
+class NewLessonViewModel(private val day: Int, private val dataSource: LessonsDatabaseDao) :
+    ViewModel() {
 
     private var _startCalendar = MutableLiveData<Calendar>()
     val startCalendar: LiveData<Calendar>
@@ -32,6 +34,10 @@ class NewLessonViewModel(private val day: Int ,private val dataSource: LessonsDa
     private var _imageName = MutableLiveData<String>("ic_lesson_0")
     val imageName: LiveData<String>
         get() = _imageName
+
+    private var _pictureList = MutableLiveData<List<String>>()
+    val pictureList: LiveData<List<String>>
+        get() = _pictureList
 
     private var _navigateToLessonFragment = MutableLiveData<Boolean?>()
     val navigateToLessonFragment: LiveData<Boolean?>
@@ -93,7 +99,15 @@ class NewLessonViewModel(private val day: Int ,private val dataSource: LessonsDa
         dataSource.insert(lesson)
     }
 
-    fun doneNavigatingToLessonFragment(){
+    fun doneNavigatingToLessonFragment() {
         _navigateToLessonFragment.value = null
+    }
+
+    fun setPictureList(list: List<String>) {
+        _pictureList.value = list
+    }
+
+    fun setImageName(name: String, resources: Resources) {
+        _imageName.value = name
     }
 }

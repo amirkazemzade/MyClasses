@@ -22,7 +22,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="64dp"
             android:contentDescription="@string/lesson_picture"
-            android:src="@drawable/ic_lesson_0"
+            pictureIcon="@{viewModel.imageName}"
             app:cardCornerRadius="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

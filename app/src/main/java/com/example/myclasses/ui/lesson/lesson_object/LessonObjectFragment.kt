@@ -46,7 +46,7 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
         binding.lessonsList.adapter = adapter
         viewModel.todayLessons.observe(viewLifecycleOwner, { value ->
             value?.let {
-                adapter.data = value
+                adapter.submitList(it)
             }
         })
 
