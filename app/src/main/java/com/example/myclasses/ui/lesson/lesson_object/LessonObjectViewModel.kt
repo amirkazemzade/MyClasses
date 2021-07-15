@@ -1,12 +1,14 @@
-package com.example.myclasses.ui.lesson.`object`
+package com.example.myclasses.ui.lesson.lesson_object
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.myclasses.database.Lesson
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.Settings
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -31,7 +33,7 @@ class LessonObjectViewModel(
         get() = _dayState
 
     private var _day = MutableLiveData<Int>()
-    private val day: LiveData<Int>
+    val day: LiveData<Int>
         get() = _day
 
     private var _state = MutableLiveData<Int>()
@@ -55,12 +57,16 @@ class LessonObjectViewModel(
     val todayLessons: LiveData<List<Lesson>>
         get() = _todayLessons
 
+    private var _navigateToNewLesson = MutableLiveData<Int?>()
+    val navigateToNewLesson: LiveData<Int?>
+        get() = _navigateToNewLesson
+
     init {
         _settings.value = Settings(preferences)
 
         loadDate()
 
-        _day.value = settings.value?.firstDayOfWeek?.plus(position)
+        _day.value = settings.value?.firstDayOfWeek?.plus(position - 1)?.mod(7)?.plus(1)
 
         _state.value =
             if (position < 7) {
@@ -69,12 +75,27 @@ class LessonObjectViewModel(
                 if (settings.value?.isWeekEven == true) 2 else 1
             }
 
-        getTodayLessons() // use coroutine if ui doesn't responds
+        viewModelScope.launch {
+            getTodayLessons() // use coroutine if ui doesn't responds
+        }
     }
 
     private fun getTodayLessons() {
         _todayLessons =
-            day.value?.let { state.value?.let { it1 -> dataSource.getTodayLessons(it, it1) } }!!
+            day.value?.let { day ->
+                state.value?.let { state ->
+                    dataSource.getTodayLessons(day, state)
+                }
+            }!!
+    }
+
+    private fun revertState(state: Int): Int {
+        return when (state) {
+            0 -> 0
+            1 -> 2
+            2 -> 1
+            else -> 0
+        }
     }
 
     private fun loadDate() {
@@ -101,5 +122,13 @@ class LessonObjectViewModel(
         calendar.timeInMillis = calendar.timeInMillis - ((todayTabId - position) * oneDay)
         val todayDate = Date(calendar.timeInMillis)
         _date.value = DateFormat.getDateInstance(DateFormat.MEDIUM).format(todayDate)
+    }
+
+    fun doneNavigatingToNewLesson() {
+        _navigateToNewLesson.value = null
+    }
+
+    fun onNewLesson() {
+        _navigateToNewLesson.value = day.value
     }
 }

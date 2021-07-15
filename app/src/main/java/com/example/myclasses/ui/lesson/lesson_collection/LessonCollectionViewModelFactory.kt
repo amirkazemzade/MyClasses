@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.collection
+package com.example.myclasses.ui.lesson.lesson_collection
 
 import android.app.Application
 import android.content.SharedPreferences

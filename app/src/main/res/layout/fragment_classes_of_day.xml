@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.object.LessonObjectViewModel" />
+            type="com.example.myclasses.ui.lesson.lesson_object.LessonObjectViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +80,7 @@
             android:layout_marginBottom="16dp"
             android:clickable="true"
             android:contentDescription="@string/add_button"
+            android:onClick="@{() -> viewModel.onNewLesson()}"
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

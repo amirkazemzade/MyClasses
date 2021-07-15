@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.`object`
+package com.example.myclasses.ui.lesson.lesson_object
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,10 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.myclasses.R
 import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.databinding.FragmentClassesOfDayBinding
+import com.example.myclasses.ui.lesson.LessonsListAdapter
+import com.example.myclasses.ui.lesson.lesson_collection.LessonCollectionFragment
+import com.example.myclasses.ui.lesson.lesson_collection.LessonCollectionFragmentDirections
 
 class LessonObjectFragment(private val position: Int) : Fragment() {
     private var _binding: FragmentClassesOfDayBinding? = null
@@ -37,9 +42,22 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
         binding.viewModel = viewModel
         backToTodayState()
 
-//        val adapter = LessonsListAdapter()
-//        adapter.data = viewModel.todayLessons.value!!
-//        binding.lessonsList.adapter = adapter
+        val adapter = LessonsListAdapter()
+        binding.lessonsList.adapter = adapter
+        viewModel.todayLessons.observe(viewLifecycleOwner, { value ->
+            value?.let {
+                adapter.data = value
+            }
+        })
+
+        viewModel.navigateToNewLesson.observe(viewLifecycleOwner, { day ->
+            day?.let {
+                val action = LessonCollectionFragmentDirections.actionNavLessonToNewLessonFragment()
+                action.dayId = day
+                this.findNavController().navigate(action)
+                doneNavigatingToNewLesson()
+            }
+        })
 
         return binding.root
     }
@@ -70,5 +88,9 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
                 )
             )
         }
+    }
+
+    private fun doneNavigatingToNewLesson() {
+        viewModel.doneNavigatingToNewLesson()
     }
 }

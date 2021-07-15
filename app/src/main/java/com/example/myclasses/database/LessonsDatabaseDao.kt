@@ -21,7 +21,7 @@ interface LessonsDatabaseDao {
     @Query(value = "SELECT * FROM lessons_table ORDER BY lessonId DESC")
     fun getAllLessons() : LiveData<List<Lesson>>
 
-    @Query(value = "SELECT * FROM lessons_table WHERE day_of_week = :day AND (session_state = :state OR session_state = 0)")
+    @Query(value = "SELECT * FROM lessons_table WHERE day_of_week = :day AND (week_state = :state OR week_state = 0) ORDER BY start_time ASC")
     fun getTodayLessons(day: Int, state: Int) : LiveData<List<Lesson>>
 
     @Query(value = "DELETE FROM lessons_table ")

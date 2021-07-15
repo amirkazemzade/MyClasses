@@ -46,10 +46,9 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         binding.daysOfWeek.setSelection((viewModel.settings.value?.firstDayOfWeek?.minus(1)!!))
         binding.daysOfWeek.onItemSelectedListener = this
+
         ArrayAdapter.createFromResource(
-            view.context,
-            R.array.odd_and_even,
-            android.R.layout.simple_spinner_dropdown_item
+            view.context, R.array.odd_and_even, android.R.layout.simple_spinner_dropdown_item
         ).also { adapter ->
             binding.oddOrEven.adapter = adapter
         }
