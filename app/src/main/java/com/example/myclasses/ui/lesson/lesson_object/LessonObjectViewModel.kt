@@ -1,10 +1,7 @@
 package com.example.myclasses.ui.lesson.lesson_object
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.myclasses.database.Lesson
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.Settings
@@ -20,85 +17,63 @@ class LessonObjectViewModel(
 ) :
     ViewModel() {
 
+    // an instance of saved app settings
     private var _settings = MutableLiveData<Settings>()
     val settings: LiveData<Settings>
         get() = _settings
 
+    // date of the day
     private var _date = MutableLiveData<String>()
     val date: LiveData<String>
         get() = _date
 
+    // weather the day is Today, Yesterday, Tomorrow or none
     private var _dayState = MutableLiveData<String>()
     val dayState: LiveData<String>
         get() = _dayState
 
+    // the day's id in calendar
     private var _day = MutableLiveData<Int>()
-    val day: LiveData<Int>
+    private val day: LiveData<Int>
         get() = _day
 
+    // weather the day is in odd or even week
     private var _state = MutableLiveData<Int>()
     private val state: LiveData<Int>
         get() = _state
 
-    private var _dayDifference = MutableLiveData<Int>()
-    val dayDifference: LiveData<Int>
-        get() = _dayDifference
-
-    val stateAsString: LiveData<String>
-        get() {
-            return when (_state.value) {
-                1 -> MutableLiveData("EVEN")
-                2 -> MutableLiveData("ODD")
-                else -> MutableLiveData("EVEN")
-            }
+    // state value as string
+    val stateAsString = Transformations.map(_state) { state ->
+        when (state) {
+            1 -> "EVEN"
+            2 -> "ODD"
+            else -> "EVEN"
         }
+    }
 
+    // list of lessons of this day
     private lateinit var _todayLessons: LiveData<List<Lesson>>
     val todayLessons: LiveData<List<Lesson>>
         get() = _todayLessons
 
-    private var _navigateToNewLesson = MutableLiveData<Int?>()
-    val navigateToNewLesson: LiveData<Int?>
-        get() = _navigateToNewLesson
-
     init {
-        _settings.value = Settings(preferences)
-
-        loadDate()
-
-        _day.value = settings.value?.firstDayOfWeek?.plus(position - 1)?.mod(7)?.plus(1)
-
-        _state.value =
-            if (position < 7) {
-                if (settings.value?.isWeekEven == true) 1 else 2
-            } else {
-                if (settings.value?.isWeekEven == true) 2 else 1
-            }
+        loadSettings(preferences)
+        getDate()
+        getDay()
+        getState()
 
         viewModelScope.launch {
-            getTodayLessons() // use coroutine if ui doesn't responds
+            getTodayLessons()
         }
     }
 
-    private fun getTodayLessons() {
-        _todayLessons =
-            day.value?.let { day ->
-                state.value?.let { state ->
-                    dataSource.getTodayLessons(day, state)
-                }
-            }!!
+    // loads saved settings
+    private fun loadSettings(preferences: SharedPreferences) {
+        _settings.value = Settings(preferences)
     }
 
-    private fun revertState(state: Int): Int {
-        return when (state) {
-            0 -> 0
-            1 -> 2
-            2 -> 1
-            else -> 0
-        }
-    }
-
-    private fun loadDate() {
+    // gets today date
+    private fun getDate() {
         val calendar = Calendar.getInstance()
         val oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
 
@@ -117,18 +92,35 @@ class LessonObjectViewModel(
             else -> ""
         }
 
-        _dayDifference.value = todayTabId - position
-
         calendar.timeInMillis = calendar.timeInMillis - ((todayTabId - position) * oneDay)
         val todayDate = Date(calendar.timeInMillis)
         _date.value = DateFormat.getDateInstance(DateFormat.MEDIUM).format(todayDate)
     }
 
-    fun doneNavigatingToNewLesson() {
-        _navigateToNewLesson.value = null
+    // gets day of week id
+    private fun getDay() {
+        _day.value = settings.value?.firstDayOfWeek?.plus(position - 1)?.mod(7)?.plus(1)
     }
 
-    fun onNewLesson() {
-        _navigateToNewLesson.value = day.value
+    // gets state of week
+    private fun getState() {
+        _state.value =
+            if (position < 7) {
+                if (settings.value?.isWeekEven == true) 1 else 2
+            } else {
+                if (settings.value?.isWeekEven == true) 2 else 1
+            }
     }
+
+    // gets today's lessons from database
+    private fun getTodayLessons() {
+        _todayLessons =
+            day.value?.let { day ->
+                state.value?.let { state ->
+                    dataSource.getTodayLessons(day, state)
+                }
+            }!!
+    }
+
+
 }

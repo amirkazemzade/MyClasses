@@ -33,15 +33,18 @@ class NewLessonFragment : Fragment() {
     ): View {
         binding = FragmentNewLessonBinding.inflate(inflater, container, false)
 
-        val dataSource = activity?.let { LessonsDatabase.getInstance(it.application).lessonsDatabaseDao }!!
+        val dataSource =
+            activity?.let { LessonsDatabase.getInstance(it.application).lessonsDatabaseDao }!!
         val arguments = NewLessonFragmentArgs.fromBundle(requireArguments())
-        viewModelFactory = NewLessonViewModelFactory(arguments.dayId, dataSource)
+
+        viewModelFactory = NewLessonViewModelFactory(arguments.tabId, arguments.dayId, dataSource)
         viewModel = ViewModelProvider(this, viewModelFactory).get(NewLessonViewModel::class.java)
 
         getPictureList()
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
         return binding.root
     }
 
@@ -78,7 +81,7 @@ class NewLessonFragment : Fragment() {
             dialogBinding.pictureList.layoutManager = GridLayoutManager(context, 4)
 
             val adapter = PictureListAdapter(PictureClickListener { pictureName ->
-                viewModel.setImageName(pictureName, resources)
+                viewModel.setImageName(pictureName)
                 dialog.dismiss()
             })
 
@@ -91,16 +94,19 @@ class NewLessonFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener {
-            if (binding.lessonNameEditText.text.toString() == ""){
-                Toast.makeText(context, "Please Enter The Name Of Lesson!", Toast.LENGTH_LONG).show()
-            } else{
+            if (binding.lessonNameEditText.text.toString() == "") {
+                Toast.makeText(context, "Please Enter The Name Of Lesson!", Toast.LENGTH_LONG)
+                    .show()
+            } else {
                 onSaveButton()
             }
         }
 
         viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
             value?.let {
-                this.findNavController().navigate(NewLessonFragmentDirections.actionNewLessonFragmentToNavLesson())
+                val action = NewLessonFragmentDirections.actionNewLessonFragmentToNavLesson()
+                action.currentTabId = value
+                this.findNavController().navigate(action)
                 viewModel.doneNavigatingToLessonFragment()
             }
         })
@@ -114,35 +120,36 @@ class NewLessonFragment : Fragment() {
         viewModel.setEndTime(hourOfDay, minute)
     }
 
-    private fun onSaveButton(){
+    private fun onSaveButton() {
         val lessonName = binding.lessonNameEditText.text.toString()
-        val weekState= binding.weekStateSpinner.selectedItemPosition
+        val weekState = binding.weekStateSpinner.selectedItemPosition
         val des = binding.description.text.toString()
         viewModel.onSaveButton(lessonName, weekState, des)
     }
 
-    private fun getPictureList(){
+    // gets list of all lesson icon images available in resources
+    private fun getPictureList() {
         var i = 0
         val list = ArrayList<String>()
         val prefix = resources.getString(R.string.defaultIconNamePrefix)
-        while (true){
+        while (true) {
             try {
-                val iconName : String = prefix + i++
+                val iconName: String = prefix + i++
                 val id = resources.getIdentifier(iconName, "drawable", context?.packageName)
-                if (id != 0){
+                if (id != 0) {
                     list.add(iconName)
                 } else {
                     setPictureList(list)
                     return
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 setPictureList(list)
                 return
             }
         }
     }
 
-    private fun setPictureList(list: List<String>){
+    private fun setPictureList(list: List<String>) {
         viewModel.setPictureList(list)
     }
 }

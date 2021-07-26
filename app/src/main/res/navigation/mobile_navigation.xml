@@ -14,6 +14,10 @@
             android:id="@+id/action_nav_lesson_to_newLessonFragment"
             app:destination="@id/newLessonFragment"
             app:popUpTo="@id/nav_lesson" />
+        <argument
+            android:name="currentTabId"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 
     <fragment
@@ -41,6 +45,10 @@
         <action
             android:id="@+id/action_newLessonFragment_to_nav_lesson"
             app:destination="@id/nav_lesson" />
+        <argument
+            android:name="tabId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment

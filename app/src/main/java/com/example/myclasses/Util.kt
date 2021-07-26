@@ -17,10 +17,6 @@ fun convertTimeInLongToFormatted(startTime: Long, endTime: Long): String {
     return "$startTimeString - $endTimeString"
 }
 
-fun main() {
-
-}
-
 fun getCurrentWeek(): Long {
     val currentTime = System.currentTimeMillis()
     val sevenDays = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)

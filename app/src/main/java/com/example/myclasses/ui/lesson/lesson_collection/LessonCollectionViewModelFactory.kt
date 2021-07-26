@@ -5,10 +5,15 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class LessonCollectionViewModelFactory(private val preferences: SharedPreferences, private val application: Application) : ViewModelProvider.Factory {
+class LessonCollectionViewModelFactory(
+    private val moveToToday: Int,
+    private val preferences: SharedPreferences,
+    private val application: Application
+) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LessonCollectionViewModel::class.java)) {
-            return LessonCollectionViewModel(preferences, application) as T
+            return LessonCollectionViewModel(moveToToday, preferences, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

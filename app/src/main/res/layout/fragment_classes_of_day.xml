@@ -72,32 +72,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addLesson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:contentDescription="@string/add_button"
-            android:onClick="@{() -> viewModel.onNewLesson()}"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@android:drawable/ic_input_add" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/addLesson"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:contentDescription="@string/add_button"-->
+<!--            android:onClick="@{() -> viewModel.onNewLesson()}"-->
+<!--            android:focusable="true"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:srcCompat="@android:drawable/ic_input_add" />-->
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/backToToday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:contentDescription="@string/back_button"
-            android:focusable="true"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/addLesson"
-            app:layout_constraintEnd_toEndOf="@+id/addLesson"
-            app:srcCompat="@drawable/ic_arrow_left" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/backToToday"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:contentDescription="@string/back_button"-->
+<!--            android:focusable="true"-->
+<!--            android:visibility="invisible"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/addLesson"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/addLesson"-->
+<!--            app:srcCompat="@drawable/ic_arrow_left" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
