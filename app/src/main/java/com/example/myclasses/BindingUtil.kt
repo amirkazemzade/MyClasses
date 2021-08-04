@@ -65,3 +65,24 @@ fun TextView.setEndTime(item: Session?) {
         }
     }
 }
+
+@BindingAdapter("dayOfWeek")
+fun TextView.setDayOfWeek(item: Session?){
+    val days = resources.getStringArray(R.array.days_of_week_long)
+    item?.let {
+        text = days[item.dayOfWeek - 1]
+    }
+}
+
+@BindingAdapter("weekState")
+fun TextView.setWeekState(item: Session?){
+    val states = resources.getStringArray(R.array.week_state)
+    item?.let {
+        text = states[item.weekState]
+    }
+}
+
+@BindingAdapter("sessionName")
+fun TextView.setSessionName(position: Int){
+    text = resources.getString(R.string.session_name, position + 1)
+}

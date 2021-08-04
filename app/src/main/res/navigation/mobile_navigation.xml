@@ -18,6 +18,9 @@
             android:name="currentTabId"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_nav_schedule_to_lessonDetailsFragment"
+            app:destination="@id/lessonDetailsFragment" />
     </fragment>
 
     <fragment
@@ -56,5 +59,14 @@
         android:name="com.example.myclasses.ui.schedule.schedule_object.LessonObjectFragment"
         android:label="LessonObjectFragment"
         tools:layout="@layout/fragment_sessions_of_day"/>
+    <fragment
+        android:id="@+id/lessonDetailsFragment"
+        android:name="com.example.myclasses.ui.lesson.LessonDetailsFragment"
+        android:label="LessonDetailsFragment"
+        tools:layout="@layout/fragment_lesson_details" >
+        <argument
+            android:name="lessonName"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myclasses.database.entities.relations.SessionWithLesson
 import com.example.myclasses.databinding.CardSessionBinding
 
-class SessionsListAdapter :
-    ListAdapter<SessionWithLesson, SessionsListAdapter.ViewHolder>(LessonDiffCallBack()) {
+class SessionsListAdapter(private val clickListener: SessionClickListener) :
+    ListAdapter<SessionWithLesson, SessionsListAdapter.ViewHolder>(SessionDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -17,14 +17,15 @@ class SessionsListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     class ViewHolder private constructor(private val binding: CardSessionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SessionWithLesson) {
+        fun bind(item: SessionWithLesson, clickListener: SessionClickListener) {
             binding.sessionWithLesson = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -38,7 +39,7 @@ class SessionsListAdapter :
     }
 }
 
-class LessonDiffCallBack : DiffUtil.ItemCallback<SessionWithLesson>() {
+class SessionDiffCallBack : DiffUtil.ItemCallback<SessionWithLesson>() {
 
     override fun areItemsTheSame(oldItem: SessionWithLesson, newItem: SessionWithLesson): Boolean {
         return oldItem.session.sessionId == newItem.session.sessionId
@@ -50,4 +51,8 @@ class LessonDiffCallBack : DiffUtil.ItemCallback<SessionWithLesson>() {
     ): Boolean {
         return oldItem == newItem
     }
+}
+
+class SessionClickListener(val clickListener: (sessionWithLesson: SessionWithLesson) -> Unit) {
+    fun onClick(sessionWithLesson: SessionWithLesson) = clickListener(sessionWithLesson)
 }
