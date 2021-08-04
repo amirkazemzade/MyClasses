@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="lesson"
-            type="com.example.myclasses.database.Lesson" />
+            name="sessionWithLesson"
+            type="com.example.myclasses.database.entities.relations.SessionWithLesson" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -43,11 +43,11 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/lesson_picture"
                     tools:srcCompat="@tools:sample/avatars"
-                    lessonIcon="@{lesson}"/>
+                    lessonIcon="@{sessionWithLesson.lesson}"/>
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/lessonName"
+                android:id="@+id/lessonNameInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toEndOf="@+id/iconCardView"
                 app:layout_constraintTop_toTopOf="@+id/iconCardView"
-                android:text="@{lesson.lessonName}"
+                android:text="@{sessionWithLesson.lesson.lessonName}"
                 tools:text="Lesson Name" />
 
             <TextView
@@ -69,9 +69,9 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lessonName"
-                app:layout_constraintTop_toTopOf="@+id/lessonName"
-                timeFormatted="@{lesson}"
+                app:layout_constraintStart_toEndOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toTopOf="@+id/lessonNameInputLayout"
+                timeFormatted="@{sessionWithLesson.session}"
                 tools:text="12:00 - 02:00" />
 
             <TextView
@@ -82,9 +82,9 @@
                 app:layout_constraintBottom_toBottomOf="@+id/iconCardView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/lessonName"
-                app:layout_constraintTop_toBottomOf="@+id/lessonName"
-                android:text="@{lesson.description}"
+                app:layout_constraintStart_toStartOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/lessonNameInputLayout"
+                android:text="@{sessionWithLesson.lesson.description}"
                 tools:text="description description  description description description" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

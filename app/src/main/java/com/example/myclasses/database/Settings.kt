@@ -3,10 +3,9 @@ package com.example.myclasses.database
 import android.content.SharedPreferences
 import java.util.*
 
-//TODO: remove setting class if its possible
 class Settings(pref: SharedPreferences) {
     private val edit = pref.edit()
-    var evenIsEven = pref.getBoolean("evenIsEven", true)
+    private var evenIsEven = pref.getBoolean("evenIsEven", true)
         set(value) {
             field = value
             edit.putBoolean("evenIsEven", value)

@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_lesson">
+    app:startDestination="@+id/nav_schedule">
 
     <fragment
-        android:id="@+id/nav_lesson"
-        android:name="com.example.myclasses.ui.lesson.lesson_collection.LessonCollectionFragment"
+        android:id="@+id/nav_schedule"
+        android:name="com.example.myclasses.ui.schedule.schedule_collection.LessonCollectionFragment"
         android:label="@string/menu_lesson"
-        tools:layout="@layout/fragment_lesson">
+        tools:layout="@layout/fragment_schedule">
         <action
             android:id="@+id/action_nav_lesson_to_newLessonFragment"
             app:destination="@id/newLessonFragment"
-            app:popUpTo="@id/nav_lesson" />
+            app:popUpTo="@id/nav_schedule" />
         <argument
             android:name="currentTabId"
             app:argType="integer"
@@ -21,7 +21,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_settings"
         android:name="com.example.myclasses.ui.settings.SettingsFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_settings" />
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/newLessonFragment"
-        android:name="com.example.myclasses.ui.lesson.newlesson.NewLessonFragment"
+        android:name="com.example.myclasses.ui.schedule.newlesson.NewLessonFragment"
         android:label="NewLessonFragment"
         tools:layout="@layout/fragment_new_lesson">
 
@@ -44,7 +44,7 @@
             android:defaultValue="7" />
         <action
             android:id="@+id/action_newLessonFragment_to_nav_lesson"
-            app:destination="@id/nav_lesson" />
+            app:destination="@id/nav_schedule" />
         <argument
             android:name="tabId"
             app:argType="integer"
@@ -53,8 +53,8 @@
 
     <fragment
         android:id="@+id/lesson_object_fragment"
-        android:name="com.example.myclasses.ui.lesson.lesson_object.LessonObjectFragment"
+        android:name="com.example.myclasses.ui.schedule.schedule_object.LessonObjectFragment"
         android:label="LessonObjectFragment"
-        tools:layout="@layout/fragment_classes_of_day"/>
+        tools:layout="@layout/fragment_sessions_of_day"/>
 
 </navigation>

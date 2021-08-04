@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lesson_collection
+package com.example.myclasses.ui.schedule.schedule_collection
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.myclasses.R
-import com.example.myclasses.databinding.FragmentLessonBinding
-import com.example.myclasses.ui.lesson.lesson_object.LessonObjectFragment
+import com.example.myclasses.databinding.FragmentScheduleBinding
+import com.example.myclasses.ui.schedule.schedule_object.LessonObjectFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -21,11 +21,11 @@ private const val NUM_OF_PAGES = 14
 
 class LessonCollectionFragment : Fragment() {
 
-    private lateinit var viewModel: LessonCollectionViewModel
+    private lateinit var viewModel: ScheduleCollectionViewModel
     private lateinit var viewModelFactory: LessonCollectionViewModelFactory
     private lateinit var pagerAdapter: PagerAdapter
 
-    private lateinit var binding: FragmentLessonBinding
+    private lateinit var binding: FragmentScheduleBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +38,9 @@ class LessonCollectionFragment : Fragment() {
         viewModelFactory =
             LessonCollectionViewModelFactory(arguments.currentTabId, getPreferences(), application)
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(LessonCollectionViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(ScheduleCollectionViewModel::class.java)
 
-        binding = FragmentLessonBinding.inflate(inflater, container, false)
+        binding = FragmentScheduleBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel

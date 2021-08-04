@@ -1,14 +1,11 @@
-package com.example.myclasses.ui.lesson.newlesson
+package com.example.myclasses.ui.schedule.newlesson
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewParent
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myclasses.databinding.CardLessonBinding
 import com.example.myclasses.databinding.CardPictureBinding
-import kotlinx.coroutines.processNextEventInCurrentThread
 
 class PictureListAdapter(private val clickListener: PictureClickListener) :
     ListAdapter<String, PictureListAdapter.ViewHolder>(PictureDIffCallBack()) {
@@ -41,7 +38,7 @@ class PictureListAdapter(private val clickListener: PictureClickListener) :
     }
 }
 
-class PictureDIffCallBack() : DiffUtil.ItemCallback<String>() {
+class PictureDIffCallBack : DiffUtil.ItemCallback<String>() {
     override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
         return oldItem == newItem
     }

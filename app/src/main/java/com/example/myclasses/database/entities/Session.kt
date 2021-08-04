@@ -1,20 +1,13 @@
-package com.example.myclasses.database
+package com.example.myclasses.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.DayOfWeek
 
-@Entity(tableName = "lessons_table")
-data class Lesson(
+@Entity(tableName = "session_table")
+data class Session(
     @PrimaryKey(autoGenerate = true)
-    var lessonId: Long = 0L,
-
-    @ColumnInfo(name = "lesson_name")
-    var lessonName: String,
-
-    @ColumnInfo(name = "image_name")
-    var imageName: String,
+    var sessionId: Long = 0L,
 
     @ColumnInfo(name = "start_time")
     var startTime: Long = 0L,
@@ -30,7 +23,6 @@ data class Lesson(
     @ColumnInfo(name = "week_state")
     var weekState: Int = 0,
 
-    @ColumnInfo(name = "description")
-    var description: String = ""
+    @ColumnInfo(name = "lesson_name")
+    var lessonName: String
 )
-

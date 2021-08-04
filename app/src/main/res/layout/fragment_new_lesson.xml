@@ -7,13 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.newlesson.NewLessonViewModel" />
+            type="com.example.myclasses.ui.schedule.newlesson.NewLessonViewModel" />
 
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,150 +32,82 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/lessonTextView"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lessonNameInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/lesson"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/lessonNameEditText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/lessonNameEditText" />
-
-            <EditText
-                android:id="@+id/lessonNameEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="52dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="@string/lesson_name"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@id/barrier"
-                app:layout_constraintTop_toBottomOf="@id/lessonIconPicture"
-                android:autofillHints="Lesson Name" />
-
-            <TextView
-                android:id="@+id/startTimeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/start_time"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/startTimePreview"
-                app:layout_constraintStart_toStartOf="@+id/lessonTextView"
-                app:layout_constraintTop_toTopOf="@+id/startTimePreview" />
-
-            <TextView
-                android:id="@+id/startTimePreview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{viewModel.startTime}"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/lessonNameEditText"
-                app:layout_constraintTop_toBottomOf="@+id/lessonNameEditText"
-                tools:text="16:03" />
-
-            <TextView
-                android:id="@+id/endTimeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/end_time"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/endTimePreview"
-                app:layout_constraintStart_toStartOf="@+id/startTimeTextView"
-                app:layout_constraintTop_toTopOf="@+id/endTimePreview" />
-
-            <TextView
-                android:id="@+id/endTimePreview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{viewModel.endTime}"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/startTimePreview"
-                app:layout_constraintTop_toBottomOf="@+id/startTimePreview"
-                tools:text="18:03" />
-
-            <TextView
-                android:id="@+id/weekTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/week"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/weekStateSpinner"
-                app:layout_constraintStart_toStartOf="@+id/endTimeTextView"
-                app:layout_constraintTop_toTopOf="@+id/weekStateSpinner" />
-
-            <Spinner
-                android:id="@+id/weekStateSpinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:spinnerMode="dialog"
-                app:layout_constraintEnd_toEndOf="@+id/endTimePreview"
-                app:layout_constraintTop_toBottomOf="@+id/endTimePreview" />
-
-            <TextView
-                android:id="@+id/descriptionTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/description"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/weekTextView"
-                app:layout_constraintTop_toBottomOf="@+id/weekTextView" />
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:gravity="start|top"
-                android:hint="@string/description"
-                android:inputType="textMultiLine"
-                app:layout_constraintBottom_toTopOf="@+id/saveButton"
-                app:layout_constraintEnd_toEndOf="@+id/weekStateSpinner"
-                app:layout_constraintStart_toStartOf="@+id/descriptionTextView"
-                app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
-                app:layout_constraintVertical_bias="1.0"
-                app:layout_constraintVertical_chainStyle="spread_inside"
-                android:autofillHints="@string/description" />
-
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="32dp"
-                android:text="@string/save"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="24dp"
+                android:autofillHints="Lesson Name"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
+                app:layout_constraintTop_toBottomOf="@id/lessonIconPicture"
+                app:startIconDrawable="@drawable/ic_baseline_class_24">
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier"
+                <AutoCompleteTextView
+                    android:id="@+id/lessonNameMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lesson_name"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sessionsList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:isScrollContainer="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="@+id/description"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/description"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                tools:itemCount="2" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/addNewSession"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:barrierDirection="end"
-                app:constraint_referenced_ids="startTimeTextView,endTimeTextView,weekTextView,descriptionTextView,lessonTextView"
-                tools:layout_editor_absoluteX="411dp"
-                tools:layout_editor_absoluteY="731dp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_baseline_add_24"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:text="@string/add_new_session"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/sessionsList"
+                app:layout_constraintTop_toBottomOf="@id/sessionsList" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/lessonNameInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/lessonNameInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_description_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 </layout>

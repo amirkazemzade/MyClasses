@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.lesson_object.LessonObjectViewModel" />
+            type="com.example.myclasses.ui.schedule.schedule_object.LessonObjectViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

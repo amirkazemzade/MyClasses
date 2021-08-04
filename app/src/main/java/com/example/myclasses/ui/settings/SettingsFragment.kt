@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.myclasses.*
-import com.example.myclasses.database.Settings
+import com.example.myclasses.R
 import com.example.myclasses.databinding.FragmentSettingsBinding
+import com.example.myclasses.getOddOrEvenId
+import com.example.myclasses.select
 
-class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class SettingsFragment : Fragment() {
 
     private lateinit var viewModel: SettingsViewModel
     private lateinit var viewModelFactory: SettingsViewModelFactory
@@ -42,38 +42,32 @@ class SettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
             R.array.days_of_week_long,
             android.R.layout.simple_spinner_dropdown_item
         ).also { adapter ->
-            binding.daysOfWeek.adapter = adapter
+            binding.firstDayOfWeekDropMenu.setAdapter(adapter)
         }
-        binding.daysOfWeek.setSelection((viewModel.settings.value?.firstDayOfWeek?.minus(1)!!))
-        binding.daysOfWeek.onItemSelectedListener = this
+        binding.firstDayOfWeekDropMenu.select(
+            (viewModel.settings.value?.firstDayOfWeek?.minus(1)!!)
+        )
+        binding.firstDayOfWeekDropMenu.setOnItemClickListener { _, _, position, _ ->
+            viewModel.settings.value?.firstDayOfWeek = position + 1
+            viewModel.settings.value
+                ?.let { settings -> getOddOrEvenId(settings.isWeekEven) }
+                ?.let { pos -> binding.weekStateDropMenu.select(pos) }
+        }
 
         ArrayAdapter.createFromResource(
             view.context, R.array.odd_and_even, android.R.layout.simple_spinner_dropdown_item
         ).also { adapter ->
-            binding.oddOrEven.adapter = adapter
+            binding.weekStateDropMenu.setAdapter(adapter)
         }
-        binding.oddOrEven.setSelection(getOddOrEvenId(viewModel.settings.value!!.isWeekEven))
-        binding.oddOrEven.onItemSelectedListener = this
+        binding.weekStateDropMenu.select(getOddOrEvenId(viewModel.settings.value?.isWeekEven!!))
+        binding.weekStateDropMenu.setOnItemClickListener { _, _, position, _ ->
+            viewModel.settings.value?.isWeekEven = position == 0
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (binding.daysOfWeek.selectedView == view) {
-            viewModel.settings.value?.firstDayOfWeek = binding.daysOfWeek.selectedItemPosition + 1
-            viewModel.settings.value?.let { getOddOrEvenId(it.isWeekEven) }?.let {
-                binding.oddOrEven.setSelection(it)
-            }
-        } else {
-            viewModel.settings.value?.isWeekEven = (binding.oddOrEven.selectedItemPosition == 0)
-        }
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-
     }
 
     private fun getPreferences(): SharedPreferences {

@@ -1,10 +1,14 @@
-package com.example.myclasses.ui.lesson.newlesson
+package com.example.myclasses.ui.schedule.newlesson
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.database.LessonsDatabaseDao
 
-class NewLessonViewModelFactory(private val tabId: Int, private val day: Int, private val dataSource: LessonsDatabaseDao) :
+class NewLessonViewModelFactory(
+    private val tabId: Int,
+    private val day: Int,
+    private val dataSource: LessonsDatabaseDao
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NewLessonViewModel::class.java)) {

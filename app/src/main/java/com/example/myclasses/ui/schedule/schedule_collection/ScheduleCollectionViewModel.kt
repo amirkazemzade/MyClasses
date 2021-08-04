@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lesson_collection
+package com.example.myclasses.ui.schedule.schedule_collection
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -10,7 +10,7 @@ import com.example.myclasses.R
 import com.example.myclasses.database.Settings
 import java.util.*
 
-class LessonCollectionViewModel(
+class ScheduleCollectionViewModel(
     moveToDay: Int,
     preferences: SharedPreferences,
     application: Application
@@ -88,7 +88,7 @@ class LessonCollectionViewModel(
     private fun getTodayTabId() {
         val calendar = Calendar.getInstance()
         val todayId = calendar.get(Calendar.DAY_OF_WEEK)
-        var dif = (todayId - 1 - nextDayId.value!!)
+        var dif = (todayId - nextDayId.value!!)
         if (dif < 0) dif += 7
         _todayTabId.value = (dif) % 7
     }
@@ -114,7 +114,6 @@ class LessonCollectionViewModel(
         _day.value = settings.value?.firstDayOfWeek?.plus(pos - 1)?.mod(7)?.plus(1)
         _dayDifference.value = todayTabId.value?.minus(pos)
         _position.value = pos
-
     }
 
     // click listener function for navigating to NewLesson

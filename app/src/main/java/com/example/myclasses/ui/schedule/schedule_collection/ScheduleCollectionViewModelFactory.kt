@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lesson_collection
+package com.example.myclasses.ui.schedule.schedule_collection
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -12,8 +12,8 @@ class LessonCollectionViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LessonCollectionViewModel::class.java)) {
-            return LessonCollectionViewModel(moveToToday, preferences, application) as T
+        if (modelClass.isAssignableFrom(ScheduleCollectionViewModel::class.java)) {
+            return ScheduleCollectionViewModel(moveToToday, preferences, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

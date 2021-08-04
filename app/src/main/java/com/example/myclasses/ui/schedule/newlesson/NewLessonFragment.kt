@@ -1,13 +1,11 @@
-package com.example.myclasses.ui.lesson.newlesson
+package com.example.myclasses.ui.schedule.newlesson
 
 import android.app.AlertDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,9 +14,6 @@ import com.example.myclasses.R
 import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.databinding.DialogPictureListBinding
 import com.example.myclasses.databinding.FragmentNewLessonBinding
-import java.lang.Exception
-import java.util.*
-import kotlin.collections.ArrayList
 
 class NewLessonFragment : Fragment() {
 
@@ -49,30 +44,22 @@ class NewLessonFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ArrayAdapter.createFromResource(
-            view.context, R.array.week_state, android.R.layout.simple_spinner_dropdown_item
-        ).also { adapter ->
-            binding.weekStateSpinner.adapter = adapter
+
+        binding.lessonNameMenu.doOnTextChanged { text, _, _, _ ->
+            viewModel.getLesson(text.toString())
         }
 
-        binding.startTimePreview.setOnClickListener {
-            val timeListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                setStartTime(hourOfDay, minute)
+        viewModel.currentLesson.observe(viewLifecycleOwner, { lesson ->
+            lesson?.let {
+                viewModel.getSessions(it.lessonName)
             }
-            val hourOfDay = viewModel.startCalendar.value?.get(Calendar.HOUR_OF_DAY)!!
-            val minute = viewModel.startCalendar.value?.get(Calendar.MINUTE)!!
-            TimePickerDialog(this.context, timeListener, hourOfDay, minute, true).show()
-        }
+        })
 
-        binding.endTimePreview.setOnClickListener {
-            val timeListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                setEndTime(hourOfDay, minute)
-            }
-            val hourOfDay = viewModel.endCalendar.value?.get(Calendar.HOUR_OF_DAY)!!
-            val minute = viewModel.endCalendar.value?.get(Calendar.MINUTE)!!
-            TimePickerDialog(this.context, timeListener, hourOfDay, minute, true).show()
-        }
-
+        viewModel.currentSessions.observe(viewLifecycleOwner, { list ->
+            val adapter = AddSessionListAdapter()
+            adapter.submitList(list)
+            binding.sessionsList.adapter = adapter
+        })
 
         binding.lessonIconPicture.setOnClickListener {
             val dialog = AlertDialog.Builder(context).create()
@@ -92,39 +79,67 @@ class NewLessonFragment : Fragment() {
             dialog.show()
         }
 
-
-        binding.saveButton.setOnClickListener {
-            if (binding.lessonNameEditText.text.toString() == "") {
-                Toast.makeText(context, "Please Enter The Name Of Lesson!", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                onSaveButton()
-            }
+        binding.addNewSession.setOnClickListener {
+            viewModel.addNewSession()
         }
 
         viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
             value?.let {
                 val action = NewLessonFragmentDirections.actionNewLessonFragmentToNavLesson()
                 action.currentTabId = value
-                this.findNavController().navigate(action)
+                findNavController().navigate(action)
                 viewModel.doneNavigatingToLessonFragment()
             }
         })
+
+        viewModel.lessons.observe(viewLifecycleOwner, { lessons ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                lessons
+            )
+            binding.lessonNameMenu.setAdapter(adapter)
+        })
     }
 
-    private fun setStartTime(hourOfDay: Int, minute: Int) {
-        viewModel.setStartTime(hourOfDay, minute)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.ic_baseline_clear_24)
+            title = "Add New Lesson"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
-    private fun setEndTime(hourOfDay: Int, minute: Int) {
-        viewModel.setEndTime(hourOfDay, minute)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.save_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_menu_save -> {
+                onSaveButton()
+            }
+            android.R.id.home -> {
+                findNavController().navigateUp()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun onSaveButton() {
-        val lessonName = binding.lessonNameEditText.text.toString()
-        val weekState = binding.weekStateSpinner.selectedItemPosition
-        val des = binding.description.text.toString()
-        viewModel.onSaveButton(lessonName, weekState, des)
+        val lessonName = binding.lessonNameInputLayout.editText?.text.toString()
+        val des = binding.description.editText?.text.toString()
+        if (lessonName == "") {
+            binding.lessonNameInputLayout.isErrorEnabled = true
+            binding.lessonNameInputLayout.error = "Pleas Enter A Name"
+        } else {
+            viewModel.onSaveButton(lessonName, des)
+        }
     }
 
     // gets list of all lesson icon images available in resources

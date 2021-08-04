@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lesson_object
+package com.example.myclasses.ui.schedule.schedule_object
 
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel

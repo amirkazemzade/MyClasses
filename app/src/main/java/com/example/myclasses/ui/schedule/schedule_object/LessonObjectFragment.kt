@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lesson_object
+package com.example.myclasses.ui.schedule.schedule_object
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.database.LessonsDatabase
-import com.example.myclasses.databinding.FragmentClassesOfDayBinding
-import com.example.myclasses.ui.lesson.LessonsListAdapter
+import com.example.myclasses.databinding.FragmentSessionsOfDayBinding
+import com.example.myclasses.ui.schedule.SessionsListAdapter
 
 class LessonObjectFragment(private val position: Int) : Fragment() {
-    private lateinit var binding: FragmentClassesOfDayBinding
+    private lateinit var binding: FragmentSessionsOfDayBinding
 
     private lateinit var viewModel: LessonObjectViewModel
     private lateinit var viewModelFactory: LessonObjectViewModelFactory
@@ -29,14 +29,14 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
         viewModelFactory = LessonObjectViewModelFactory(position, dataSource, getPreferences())
         viewModel = ViewModelProvider(this, viewModelFactory).get(LessonObjectViewModel::class.java)
 
-        binding = FragmentClassesOfDayBinding.inflate(inflater, container, false)
+        binding = FragmentSessionsOfDayBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = LessonsListAdapter()
+        val adapter = SessionsListAdapter()
         binding.lessonsList.adapter = adapter
-        viewModel.todayLessons.observe(viewLifecycleOwner, { value ->
+        viewModel.todaySessions.observe(viewLifecycleOwner, { value ->
             value?.let {
                 adapter.submitList(it)
             }

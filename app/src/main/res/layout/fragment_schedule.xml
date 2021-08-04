@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.lesson_collection.LessonCollectionViewModel" />
+            type="com.example.myclasses.ui.schedule.schedule_collection.ScheduleCollectionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.lesson.lesson_collection.LessonCollectionFragment">
+        tools:context=".ui.schedule.schedule_collection.LessonCollectionFragment">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

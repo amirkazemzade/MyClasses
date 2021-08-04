@@ -1,10 +1,10 @@
-package com.example.myclasses.ui.lesson.lesson_object
+package com.example.myclasses.ui.schedule.schedule_object
 
 import android.content.SharedPreferences
 import androidx.lifecycle.*
-import com.example.myclasses.database.Lesson
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.Settings
+import com.example.myclasses.database.entities.relations.SessionWithLesson
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
@@ -52,9 +52,9 @@ class LessonObjectViewModel(
     }
 
     // list of lessons of this day
-    private lateinit var _todayLessons: LiveData<List<Lesson>>
-    val todayLessons: LiveData<List<Lesson>>
-        get() = _todayLessons
+    private lateinit var _todaySessions: LiveData<List<SessionWithLesson>>
+    val todaySessions: LiveData<List<SessionWithLesson>>
+        get() = _todaySessions
 
     init {
         loadSettings(preferences)
@@ -114,13 +114,11 @@ class LessonObjectViewModel(
 
     // gets today's lessons from database
     private fun getTodayLessons() {
-        _todayLessons =
+        _todaySessions =
             day.value?.let { day ->
                 state.value?.let { state ->
-                    dataSource.getTodayLessons(day, state)
+                    dataSource.getSessionsWithLessonOfDay(day, state)
                 }
             }!!
     }
-
-
 }
