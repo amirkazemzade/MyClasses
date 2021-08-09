@@ -1,12 +1,10 @@
-package com.example.myclasses.ui.schedule
+package com.example.myclasses
 
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
-import com.example.myclasses.R
-import com.example.myclasses.convertTimeInLongToFormatted
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
 import java.text.DateFormat
@@ -67,7 +65,7 @@ fun TextView.setEndTime(item: Session?) {
 }
 
 @BindingAdapter("dayOfWeek")
-fun TextView.setDayOfWeek(item: Session?){
+fun TextView.setDayOfWeek(item: Session?) {
     val days = resources.getStringArray(R.array.days_of_week_long)
     item?.let {
         text = days[item.dayOfWeek - 1]
@@ -75,7 +73,7 @@ fun TextView.setDayOfWeek(item: Session?){
 }
 
 @BindingAdapter("weekState")
-fun TextView.setWeekState(item: Session?){
+fun TextView.setWeekState(item: Session?) {
     val states = resources.getStringArray(R.array.week_state)
     item?.let {
         text = states[item.weekState]
@@ -83,6 +81,6 @@ fun TextView.setWeekState(item: Session?){
 }
 
 @BindingAdapter("sessionName")
-fun TextView.setSessionName(position: Int){
+fun TextView.setSessionName(position: Int) {
     text = resources.getString(R.string.session_name, position + 1)
 }

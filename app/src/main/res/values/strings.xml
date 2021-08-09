@@ -33,6 +33,9 @@
     <string name="this_week_state">This Week State</string>
     <string name="day_of_week">Day Of Week</string>
     <string name="session_name">Session %1$d</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="remove">Remove</string>
 
 
     <string-array name="days_of_week_long">

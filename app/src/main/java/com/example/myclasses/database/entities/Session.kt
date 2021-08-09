@@ -23,6 +23,6 @@ data class Session(
     @ColumnInfo(name = "week_state")
     var weekState: Int = 0,
 
-    @ColumnInfo(name = "lesson_name")
-    var lessonName: String
+    @ColumnInfo(name = "lesson_id")
+    var lessonId: Long
 )

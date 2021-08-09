@@ -16,14 +16,14 @@ fun convertTimeInLongToFormatted(startTime: Long, endTime: Long): String {
         DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(endCalendar.timeInMillis))
 
 
-    return "$startTimeString - $endTimeString"
+    return "$startTimeString\n$endTimeString"
 }
 
 fun getOddOrEvenId(isEven: Boolean): Int {
     return if (isEven) 0 else 1
 }
 
-fun AutoCompleteTextView.select(positon: Int) {
-    val itemText = adapter.getItem(positon).toString()
+fun AutoCompleteTextView.select(position: Int) {
+    val itemText = adapter.getItem(position).toString()
     setText(itemText, false)
 }

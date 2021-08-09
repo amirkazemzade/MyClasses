@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.schedule.newlesson
+package com.example.myclasses.ui.lesson.newlesson
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -46,12 +46,18 @@ class NewLessonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.lessonNameMenu.doOnTextChanged { text, _, _, _ ->
-            viewModel.getLesson(text.toString())
+            if (binding.lessonNameInputLayout.isErrorEnabled) {
+                binding.lessonNameInputLayout.isErrorEnabled = false
+                binding.lessonNameInputLayout.error = ""
+            }
+            viewModel.getLessonWithSessions(text.toString())
         }
 
         viewModel.currentLesson.observe(viewLifecycleOwner, { lesson ->
-            lesson?.let {
-                viewModel.getSessions(it.lessonName)
+            if (lesson != null) {
+                binding.description.editText?.setText(lesson.description)
+            } else {
+                binding.description.editText?.setText("")
             }
         })
 
@@ -131,17 +137,6 @@ class NewLessonFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onSaveButton() {
-        val lessonName = binding.lessonNameInputLayout.editText?.text.toString()
-        val des = binding.description.editText?.text.toString()
-        if (lessonName == "") {
-            binding.lessonNameInputLayout.isErrorEnabled = true
-            binding.lessonNameInputLayout.error = "Pleas Enter A Name"
-        } else {
-            viewModel.onSaveButton(lessonName, des)
-        }
-    }
-
     // gets list of all lesson icon images available in resources
     private fun getPictureList() {
         var i = 0
@@ -166,5 +161,16 @@ class NewLessonFragment : Fragment() {
 
     private fun setPictureList(list: List<String>) {
         viewModel.setPictureList(list)
+    }
+
+    private fun onSaveButton() {
+        val lessonName = binding.lessonNameInputLayout.editText?.text.toString()
+        val des = binding.description.editText?.text.toString()
+        if (lessonName == "") {
+            binding.lessonNameInputLayout.isErrorEnabled = true
+            binding.lessonNameInputLayout.error = "Please Enter A Name"
+        } else {
+            viewModel.onSaveButton(lessonName, des)
+        }
     }
 }

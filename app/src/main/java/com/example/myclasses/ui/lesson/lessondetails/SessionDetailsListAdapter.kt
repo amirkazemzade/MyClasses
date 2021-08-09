@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson
+package com.example.myclasses.ui.lesson.lessondetails
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myclasses.database.entities.Session
 import com.example.myclasses.databinding.CardSessionDetailsBinding
-import com.example.myclasses.ui.schedule.setSessionName
+import com.example.myclasses.setSessionName
+
 
 class SessionDetailsListAdapter :
     ListAdapter<Session, SessionDetailsListAdapter.ViewHolder>(SessionDiffCallBack()) {

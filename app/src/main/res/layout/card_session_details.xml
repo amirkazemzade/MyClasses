@@ -42,7 +42,6 @@
                 android:layout_marginTop="8dp"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
-                android:text="@{session.lessonName}"
                 android:textSize="16sp"
                 app:drawableStartCompat="@drawable/ic_24_hours"
                 app:layout_constraintEnd_toEndOf="@+id/sessionName"

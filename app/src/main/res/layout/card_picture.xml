@@ -8,7 +8,7 @@
             type="String" />
         <variable
             name="clickListener"
-            type="com.example.myclasses.ui.schedule.newlesson.PictureClickListener" />
+            type="com.example.myclasses.ui.lesson.newlesson.PictureClickListener" />
     </data>
 
     <ImageView

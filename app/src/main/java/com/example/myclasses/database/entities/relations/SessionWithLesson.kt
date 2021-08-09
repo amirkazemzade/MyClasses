@@ -8,8 +8,8 @@ import com.example.myclasses.database.entities.Session
 data class SessionWithLesson(
     @Embedded val session: Session,
     @Relation(
-        parentColumn = "lesson_name",
-        entityColumn = "lessonName"
+        parentColumn = "lesson_id",
+        entityColumn = "lessonId"
     )
     val lesson: Lesson
 )

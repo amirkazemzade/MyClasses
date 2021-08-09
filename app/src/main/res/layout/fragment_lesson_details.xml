@@ -7,63 +7,133 @@
 
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.LessonDetailsViewModel" />
+            type="com.example.myclasses.ui.lesson.lessondetails.LessonDetailsViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/lessonPicture"
-            lessonIcon="@{viewModel.lesson}"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="64dp"
-            android:contentDescription="@string/lesson_picture"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ImageContrastCheck,ImageContrastCheck"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/lessonName"
+        <Button
+            android:id="@+id/edit"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@{viewModel.lesson.lessonName}"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/lessonPicture"
-            app:layout_constraintStart_toStartOf="@+id/lessonPicture"
-            app:layout_constraintTop_toBottomOf="@+id/lessonPicture"
-            tools:text="Lesson Name" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{viewModel.lesson.description}"
-            app:layout_constraintEnd_toEndOf="@+id/lessonName"
-            app:layout_constraintStart_toStartOf="@+id/lessonName"
-            app:layout_constraintTop_toBottomOf="@+id/lessonName"
-            tools:text="description" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sessionsList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/edit"
+            android:textColor="#000000"
+            android:onClick="@{() -> viewModel.onEdit()}"
+            app:icon="@drawable/ic_edit"
+            app:iconGravity="textTop"
+            app:iconTint="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/share"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/share"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/share"
+            android:textColor="#000000"
+            app:icon="@drawable/ic_share"
+            app:iconGravity="textTop"
+            app:iconTint="#000000"
+            app:layout_constraintBottom_toBottomOf="@+id/edit"
+            app:layout_constraintEnd_toStartOf="@+id/remove"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/edit"
+            app:layout_constraintTop_toTopOf="@+id/edit" />
+
+        <Button
+            android:id="@+id/remove"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove"
+            android:onClick="@{() -> viewModel.onRemove()}"
+            android:textColor="#000000"
+            app:icon="@drawable/ic_delete"
+            app:iconGravity="textTop"
+            app:iconTint="#000000"
+            app:layout_constraintBottom_toBottomOf="@+id/share"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/share"
+            app:layout_constraintTop_toTopOf="@+id/share" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/share"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/lessonPicture"
+                    lessonIcon="@{viewModel.lesson}"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="64dp"
+                    android:contentDescription="@string/lesson_picture"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck,ImageContrastCheck"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/lessonName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@{viewModel.lesson.lessonName}"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/lessonPicture"
+                    app:layout_constraintStart_toStartOf="@+id/lessonPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/lessonPicture"
+                    tools:text="Lesson Name" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{viewModel.lesson.description}"
+                    app:layout_constraintEnd_toEndOf="@+id/lessonName"
+                    app:layout_constraintStart_toStartOf="@+id/lessonName"
+                    app:layout_constraintTop_toBottomOf="@+id/lessonName"
+                    tools:text="description" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sessionsList"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/description"
+                    app:layout_constraintVertical_bias="0.0" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

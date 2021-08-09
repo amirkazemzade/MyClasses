@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.newlesson.NewLessonViewModel" />
+            type="com.example.myclasses.ui.lesson.editlesson.EditLessonViewModel" />
 
     </data>
 
@@ -34,7 +34,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lessonNameInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -47,8 +47,8 @@
                 app:layout_constraintTop_toBottomOf="@id/lessonIconPicture"
                 app:startIconDrawable="@drawable/ic_baseline_class_24">
 
-                <AutoCompleteTextView
-                    android:id="@+id/lessonNameMenu"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lessonNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lesson_name"

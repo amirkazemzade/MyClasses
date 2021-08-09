@@ -40,7 +40,7 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
         val adapter = SessionsListAdapter(SessionClickListener { sessionWithLesson ->
             val action =
                 LessonCollectionFragmentDirections.actionNavScheduleToLessonDetailsFragment(
-                    sessionWithLesson.lesson.lessonName
+                    sessionWithLesson.lesson.lessonId
                 )
             findNavController().navigate(action)
         })

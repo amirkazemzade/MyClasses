@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/newLessonFragment"
-        android:name="com.example.myclasses.ui.schedule.newlesson.NewLessonFragment"
+        android:name="com.example.myclasses.ui.lesson.newlesson.NewLessonFragment"
         android:label="NewLessonFragment"
         tools:layout="@layout/fragment_new_lesson">
 
@@ -61,12 +61,24 @@
         tools:layout="@layout/fragment_sessions_of_day"/>
     <fragment
         android:id="@+id/lessonDetailsFragment"
-        android:name="com.example.myclasses.ui.lesson.LessonDetailsFragment"
+        android:name="com.example.myclasses.ui.lesson.lessondetails.LessonDetailsFragment"
         android:label="LessonDetailsFragment"
         tools:layout="@layout/fragment_lesson_details" >
         <argument
-            android:name="lessonName"
-            app:argType="string" />
+            android:name="lessonId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_lessonDetailsFragment_to_editLessonFragment"
+            app:destination="@id/editLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editLessonFragment"
+        android:name="com.example.myclasses.ui.lesson.editlesson.EditLessonFragment"
+        android:label="EditLessonFragment"
+        tools:layout="@layout/fragment_edit_lesson">
+        <argument
+            android:name="lessonId"
+            app:argType="long" />
     </fragment>
 
 </navigation>

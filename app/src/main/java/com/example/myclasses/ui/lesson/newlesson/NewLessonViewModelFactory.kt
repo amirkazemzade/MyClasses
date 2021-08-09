@@ -1,19 +1,19 @@
-package com.example.myclasses.ui.lesson
+package com.example.myclasses.ui.lesson.newlesson
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.database.LessonsDatabaseDao
 
-class LessonDetailsViewModelFactory(
-    private val lessonName: String,
+class NewLessonViewModelFactory(
+    private val tabId: Int,
+    private val day: Int,
     private val dataSource: LessonsDatabaseDao
-) : ViewModelProvider.Factory {
+) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LessonDetailsViewModel::class.java)) {
-            return LessonDetailsViewModel(lessonName, dataSource) as T
+        if (modelClass.isAssignableFrom(NewLessonViewModel::class.java)) {
+            return NewLessonViewModel(tabId, day, dataSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-
-
 }

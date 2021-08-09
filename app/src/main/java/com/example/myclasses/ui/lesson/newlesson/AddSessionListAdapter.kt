@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.schedule.newlesson
+package com.example.myclasses.ui.lesson.newlesson
 
 import android.app.TimePickerDialog
 import android.content.Context
