@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myclasses.database.LessonsDatabase
+import com.example.myclasses.database.entities.Session
 import com.example.myclasses.databinding.DialogPictureListBinding
 import com.example.myclasses.databinding.FragmentEditLessonBinding
 import com.example.myclasses.ui.lesson.newlesson.*
@@ -61,7 +62,9 @@ class EditLessonFragment : Fragment() {
         })
 
         viewModel.currentSessions.observe(viewLifecycleOwner, { list ->
-            val adapter = AddSessionListAdapter()
+            val adapter = AddSessionListAdapter(SessionDeleteClickListener {
+                viewModel.removeSession(it)
+            })
             adapter.submitList(list)
             binding.sessionsList.adapter = adapter
         })

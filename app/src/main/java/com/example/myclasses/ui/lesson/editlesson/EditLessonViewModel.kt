@@ -19,6 +19,8 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
     val currentSessions: LiveData<List<Session>>
         get() = _currentSessions
 
+    private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+
     // name of selected image for lesson
     private var _imageName = MutableLiveData("ic_lesson_0")
     val imageName: LiveData<String>
@@ -119,12 +121,24 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
         viewModelScope.launch {
             currentLesson.value?.let { updateLesson(it) }
             currentSessions.value?.forEach { session ->
-                if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1) {
+                if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.lessonId >= 0) {
                     dataSource.insertSession(session)
+                } else {
+                    dataSource.deleteSession(session)
                 }
+            }
+            sessionRemoveList.value?.forEach { session ->
+                dataSource.deleteSession(session)
             }
             _navigateUp.value = true
         }
 
+    }
+
+    fun removeSession(session: Session) {
+        val list = currentSessions.value as MutableList
+        list.remove(session)
+        sessionRemoveList.value?.add(session)
+        _currentSessions.value = list
     }
 }

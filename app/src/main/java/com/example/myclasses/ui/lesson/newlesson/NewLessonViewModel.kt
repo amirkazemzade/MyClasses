@@ -30,6 +30,8 @@ class NewLessonViewModel(
     val currentSessions: LiveData<List<Session>>
         get() = _currentSessions
 
+    private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+
     // name of selected image for lesson
     private var _imageName = MutableLiveData("ic_lesson_0")
     val imageName: LiveData<String>
@@ -92,7 +94,7 @@ class NewLessonViewModel(
     // adds a new session to list of sessions
     fun addNewSession() {
         val sessions = currentSessions.value as MutableList
-        val lessonId = if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
+        val lessonId = if (currentLesson.value != null) currentLesson.value?.lessonId!! else 0
         sessions.add(Session(0, -1, -1, -1, -1, lessonId))
         _currentSessions.value = sessions
     }
@@ -142,6 +144,9 @@ class NewLessonViewModel(
                         dataSource.insertSession(session)
                     }
                 }
+                sessionRemoveList.value?.forEach { session ->
+                    dataSource.deleteSession(session)
+                }
             }
         } else {
             currentLesson.value?.imageName = imageName.value.toString()
@@ -153,8 +158,18 @@ class NewLessonViewModel(
                         dataSource.insertSession(session)
                     }
                 }
+                sessionRemoveList.value?.forEach { session ->
+                    dataSource.deleteSession(session)
+                }
             }
         }
         _navigateToLessonFragment.value = dayId
+    }
+
+    fun removeSession(session: Session) {
+        val list = currentSessions.value as MutableList
+        list.remove(session)
+        sessionRemoveList.value?.add(session)
+        _currentSessions.value = list
     }
 }

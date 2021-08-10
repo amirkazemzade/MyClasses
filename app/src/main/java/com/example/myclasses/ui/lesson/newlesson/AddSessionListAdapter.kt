@@ -16,7 +16,7 @@ import com.example.myclasses.select
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AddSessionListAdapter :
+class AddSessionListAdapter(private val clickListener: SessionDeleteClickListener) :
     ListAdapter<Session, AddSessionListAdapter.ViewHolder>(SessionDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,7 +25,7 @@ class AddSessionListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, position)
+        holder.bind(item, position, clickListener)
     }
 
     class ViewHolder private constructor(
@@ -36,14 +36,17 @@ class AddSessionListAdapter :
         private val endCalendar = MutableLiveData<Calendar>()
 
 
-        fun bind(item: Session, position: Int) {
-
+        fun bind(item: Session, position: Int, clickListener: SessionDeleteClickListener) {
             binding.session = item
             binding.executePendingBindings()
 
             //Session Name
             binding.sessionName.text =
                 context.resources.getString(R.string.session_name, position + 1)
+
+            binding.deleteSession.setOnClickListener{
+                clickListener.onClick(item)
+            }
 
             // Day Of Week
             ArrayAdapter.createFromResource(
@@ -152,4 +155,8 @@ class SessionDiffCallBack : DiffUtil.ItemCallback<Session>() {
         return oldItem == newItem
     }
 
+}
+
+class SessionDeleteClickListener(val clickListener: (session: Session) -> Unit){
+    fun onClick(session: Session) = clickListener(session)
 }
