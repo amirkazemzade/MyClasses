@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
+import com.example.myclasses.database.entities.Teacher
 import kotlinx.coroutines.launch
 
 class NewLessonViewModel(
@@ -18,19 +19,29 @@ class NewLessonViewModel(
 
     val lessons = dataSource.getLessons()
 
+    val teachers = dataSource.getTeachers()
+
     private var _currentLesson = MutableLiveData<Lesson?>()
     val currentLesson: LiveData<Lesson?>
         get() = _currentLesson
 
-    private var _wasLessonNull = false
-    private val wasLessonNull: Boolean
-        get() = _wasLessonNull
+    private var wasLessonNull = false
+
+    private var wasTeacherNull = false
 
     private var _currentSessions = MutableLiveData<List<Session>>()
     val currentSessions: LiveData<List<Session>>
         get() = _currentSessions
 
     private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+
+    private val _currentTeacher = MutableLiveData<Teacher?>(null)
+    val currentTeacher: LiveData<Teacher?>
+        get() = _currentTeacher
+
+    private var _isTeacherMenuExpended = MutableLiveData(false)
+    val isTeacherMenuExpended: LiveData<Boolean>
+        get() = _isTeacherMenuExpended
 
     // name of selected image for lesson
     private var _imageName = MutableLiveData("ic_lesson_0")
@@ -70,24 +81,54 @@ class NewLessonViewModel(
         viewModelScope.launch {
             getLesson(name)
             getSessions()
+            getTeacherOfLesson()
+            wasLessonNull = currentLesson.value == null
+        }
+    }
+
+    private suspend fun insertTeacher() {
+        _currentTeacher.value?.let { teacher ->
+            dataSource.insertTeacher(teacher)
+            getTeacher(teacher.name)
         }
     }
 
     // gets lesson from database by name of it
     private suspend fun getLesson(name: String) {
         val lesson = dataSource.getLesson(name)
-        if (!wasLessonNull || lesson != null) {
+        if (!wasLessonNull || lesson != null)
             _currentLesson.value = lesson
-        }
-        _wasLessonNull = lesson == null
     }
 
     // gets sessions list from database by id of lesson
     private suspend fun getSessions() {
         viewModelScope.launch {
             val lessonId = if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
-            _currentSessions.value = dataSource.getSessions(lessonId)
-            addNewSession()
+            if (!wasLessonNull || currentLesson.value != null) {
+                _currentSessions.value = dataSource.getSessions(lessonId)
+                addNewSession()
+            }
+        }
+    }
+
+    // gets saved teacher of current lesson from database
+    private suspend fun getTeacherOfLesson() {
+        if (currentLesson.value != null && currentLesson.value?.teacherId != -1L) {
+            currentLesson.value?.teacherId?.let { id ->
+                _currentTeacher.value = dataSource.getTeacher(id)
+            }
+        } else {
+            _currentTeacher.value = null
+        }
+    }
+
+    // gets the teacher with the given name
+    fun getTeacher(name: String) {
+        viewModelScope.launch {
+            val teacher = dataSource.getTeacher(name)
+            if (!wasTeacherNull || teacher != null)
+                _currentTeacher.value = teacher
+            wasTeacherNull = teacher == null
         }
     }
 
@@ -111,6 +152,25 @@ class NewLessonViewModel(
         dataSource.updateLesson(lesson)
     }
 
+    // updates current teacher values from given teacher
+    private fun updateTeacher(teacher: Teacher) {
+        _currentTeacher.value?.let { current ->
+            current.name = teacher.name
+            current.email = teacher.email
+            current.phoneNumber = teacher.phoneNumber
+            current.address = teacher.address
+            current.websiteAddress = teacher.websiteAddress
+        }
+    }
+
+    // removes given session from session list and adds it to remove list
+    fun removeSession(session: Session) {
+        val list = currentSessions.value as MutableList
+        list.remove(session)
+        sessionRemoveList.value?.add(session)
+        _currentSessions.value = list
+    }
+
     // resets value of navigation after navigation has done
     fun doneNavigatingToLessonFragment() {
         _navigateToLessonFragment.value = null
@@ -129,11 +189,20 @@ class NewLessonViewModel(
     // click listener for save button that saves lesson to database
     fun onSaveButton(
         lessonName: String,
-        des: String
+        des: String,
+        teacher: Teacher
     ) {
         if (currentLesson.value == null) {
-            _currentLesson.value = Lesson(0, lessonName, imageName.value!!, des)
             viewModelScope.launch {
+                if (teacher.name != "") {
+                    if (currentTeacher.value == null) _currentTeacher.value = teacher
+                    else updateTeacher(teacher)
+                    insertTeacher()
+                } else {
+                    _currentTeacher.value = null
+                }
+                val teacherId = _currentTeacher.value?.teacherId ?: -1L
+                _currentLesson.value = Lesson(0, lessonName, imageName.value!!, des, teacherId)
                 currentLesson.value?.let {
                     insertLesson(it)
                     getLesson(it.lessonName)
@@ -149,9 +218,18 @@ class NewLessonViewModel(
                 }
             }
         } else {
-            currentLesson.value?.imageName = imageName.value.toString()
-            currentLesson.value?.description = des
             viewModelScope.launch {
+                if (teacher.name != "") {
+                    if (currentTeacher.value == null) _currentTeacher.value = teacher
+                    else updateTeacher(teacher)
+                    insertTeacher()
+                } else {
+                    _currentTeacher.value = null
+                }
+                val teacherId = _currentTeacher.value?.teacherId ?: -1L
+                currentLesson.value?.teacherId = teacherId
+                currentLesson.value?.imageName = imageName.value.toString()
+                currentLesson.value?.description = des
                 currentLesson.value?.let { updateLesson(it) }
                 currentSessions.value?.forEach { session ->
                     if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.sessionId >= 0) {
@@ -166,10 +244,12 @@ class NewLessonViewModel(
         _navigateToLessonFragment.value = dayId
     }
 
-    fun removeSession(session: Session) {
-        val list = currentSessions.value as MutableList
-        list.remove(session)
-        sessionRemoveList.value?.add(session)
-        _currentSessions.value = list
+    fun onTeacherMenuClicked() {
+        _isTeacherMenuExpended.value = isTeacherMenuExpended.value?.not()
     }
+
+    fun refreshIsTeacherMenuExpanded() {
+        _isTeacherMenuExpended.value = _isTeacherMenuExpended.value
+    }
+
 }

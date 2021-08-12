@@ -56,12 +56,153 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teacherNameInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/teacher_name"
+                app:layout_constraintEnd_toStartOf="@+id/teacherMenu"
+                app:layout_constraintStart_toStartOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/lessonNameInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_person_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/teacherNameMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/teacherMenu"
+                style="@android:style/Widget.DeviceDefault.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onTeacherMenuClicked()}"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/delete_session"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/teacherNameInputLayout"
+                app:layout_constraintEnd_toEndOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toTopOf="@+id/teacherNameInputLayout"
+                app:srcCompat="@drawable/ic_arrow_down_24" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/teacherFieldsGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="teacherPhoneInputLayout,teacherAddressInputLayout,teacherEmailInputLayout,teacherWebsiteInputLayout"
+                tools:visibility="visible" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teacherEmailInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/email"
+                app:layout_constraintEnd_toEndOf="@+id/teacherNameInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/teacherNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/teacherNameInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teacherPhoneInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/phone"
+                app:layout_constraintEnd_toEndOf="@+id/teacherNameInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/teacherNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/teacherEmailInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_phone_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teacherAddressInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/address"
+                app:layout_constraintEnd_toEndOf="@+id/teacherNameInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/teacherNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/teacherPhoneInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_location_on_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teacherWebsiteInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/website"
+                app:layout_constraintEnd_toEndOf="@+id/teacherNameInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/teacherNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/teacherAddressInputLayout"
+                app:startIconDrawable="@drawable/ic_globalization">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/lessonNameInputLayout"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/lessonNameInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/teacherWebsiteInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_description_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sessionsList"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:isScrollContainer="false"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="@+id/description"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -85,26 +226,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/sessionsList"
                 app:layout_constraintTop_toBottomOf="@id/sessionsList" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/description"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/lessonNameInputLayout"
-                app:layout_constraintStart_toStartOf="@+id/lessonNameInputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/lessonNameInputLayout"
-                app:startIconDrawable="@drawable/ic_baseline_description_24">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/description"
-                    android:inputType="textMultiLine" />
-
-
-            </com.google.android.material.textfield.TextInputLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

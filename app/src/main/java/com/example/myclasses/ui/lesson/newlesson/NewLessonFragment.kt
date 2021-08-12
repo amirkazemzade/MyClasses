@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myclasses.R
 import com.example.myclasses.database.LessonsDatabase
-import com.example.myclasses.database.entities.Session
+import com.example.myclasses.database.entities.Teacher
 import com.example.myclasses.databinding.DialogPictureListBinding
 import com.example.myclasses.databinding.FragmentNewLessonBinding
 
@@ -54,6 +54,10 @@ class NewLessonFragment : Fragment() {
             viewModel.getLessonWithSessions(text.toString())
         }
 
+        binding.teacherNameInputLayout.editText?.doOnTextChanged { text, start, before, count ->
+            viewModel.getTeacher(text.toString())
+        }
+
         viewModel.currentLesson.observe(viewLifecycleOwner, { lesson ->
             if (lesson != null) {
                 binding.description.editText?.setText(lesson.description)
@@ -68,6 +72,45 @@ class NewLessonFragment : Fragment() {
             })
             adapter.submitList(list)
             binding.sessionsList.adapter = adapter
+        })
+
+        viewModel.currentTeacher.observe(viewLifecycleOwner, { teacher ->
+            if (teacher != null) {
+                if (binding.teacherNameInputLayout.editText?.text.toString() != teacher.name)
+                    binding.teacherNameInputLayout.editText?.setText(teacher.name)
+                binding.teacherEmailInputLayout.let {
+                    it.editText?.setText(teacher.email)
+                    if (teacher.email != "")
+                        it.visibility = View.VISIBLE
+                }
+
+                binding.teacherPhoneInputLayout.let {
+                    if (teacher.phoneNumber != -1) {
+                        it.editText?.setText(teacher.phoneNumber.toString())
+                        it.visibility = View.VISIBLE
+                    } else
+                        it.editText?.setText("")
+                }
+                binding.teacherAddressInputLayout.let {
+                    it.editText?.setText(teacher.address)
+                    if (teacher.address != "")
+                        it.visibility = View.VISIBLE
+                }
+                binding.teacherWebsiteInputLayout.let {
+                    it.editText?.setText(teacher.websiteAddress)
+                    if (teacher.websiteAddress != "")
+                        it.visibility = View.VISIBLE
+                }
+            } else {
+                if (!binding.teacherNameInputLayout.editText?.isFocused!!)
+                    binding.teacherNameInputLayout.editText?.setText("")
+                binding.teacherEmailInputLayout.editText?.setText("")
+                binding.teacherPhoneInputLayout.editText?.setText("")
+                binding.teacherAddressInputLayout.editText?.setText("")
+                binding.teacherWebsiteInputLayout.editText?.setText("")
+                binding.teacherFieldsGroup.visibility = View.GONE
+            }
+            viewModel.refreshIsTeacherMenuExpanded()
         })
 
         binding.lessonIconPicture.setOnClickListener {
@@ -87,6 +130,46 @@ class NewLessonFragment : Fragment() {
             dialog.setView(dialogBinding.root)
             dialog.show()
         }
+
+        viewModel.isTeacherMenuExpended.observe(viewLifecycleOwner, { value ->
+            when (value) {
+                false -> {
+                    val noTeacher = binding.teacherNameInputLayout.editText?.text.toString() == ""
+                    binding.teacherMenu.setImageResource(R.drawable.ic_arrow_down_24)
+                    binding.teacherEmailInputLayout.let {
+                        if (noTeacher) it.editText?.setText("")
+                        if (it.editText?.text.toString() == "") it.visibility = View.GONE
+                    }
+                    binding.teacherPhoneInputLayout.let {
+                        if (noTeacher) it.editText?.setText("")
+                        if (it.editText?.text.toString() == "") it.visibility = View.GONE
+                    }
+                    binding.teacherAddressInputLayout.let {
+                        if (noTeacher) it.editText?.setText("")
+                        if (it.editText?.text.toString() == "") it.visibility = View.GONE
+                    }
+                    binding.teacherWebsiteInputLayout.let {
+                        if (noTeacher) it.editText?.setText("")
+                        if (it.editText?.text.toString() == "") it.visibility = View.GONE
+                    }
+                }
+                true -> {
+                    binding.teacherMenu.setImageResource(R.drawable.ic_arrow_up_24)
+                    binding.teacherEmailInputLayout.let {
+                        if (it.editText?.text.toString() == "") it.visibility = View.VISIBLE
+                    }
+                    binding.teacherPhoneInputLayout.let {
+                        if (it.editText?.text.toString() == "") it.visibility = View.VISIBLE
+                    }
+                    binding.teacherAddressInputLayout.let {
+                        if (it.editText?.text.toString() == "") it.visibility = View.VISIBLE
+                    }
+                    binding.teacherWebsiteInputLayout.let {
+                        if (it.editText?.text.toString() == "") it.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
 
         binding.addNewSession.setOnClickListener {
             viewModel.addNewSession()
@@ -108,6 +191,15 @@ class NewLessonFragment : Fragment() {
                 lessons
             )
             binding.lessonNameMenu.setAdapter(adapter)
+        })
+
+        viewModel.teachers.observe(viewLifecycleOwner, { teachers ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                teachers
+            )
+            binding.teacherNameMenu.setAdapter(adapter)
         })
     }
 
@@ -168,12 +260,25 @@ class NewLessonFragment : Fragment() {
 
     private fun onSaveButton() {
         val lessonName = binding.lessonNameInputLayout.editText?.text.toString()
-        val des = binding.description.editText?.text.toString()
         if (lessonName == "") {
             binding.lessonNameInputLayout.isErrorEnabled = true
             binding.lessonNameInputLayout.error = "Please Enter A Name"
         } else {
-            viewModel.onSaveButton(lessonName, des)
+            val des = binding.description.editText?.text.toString()
+            val teacherName = binding.teacherNameInputLayout.editText?.text.toString()
+            val teacherEmail = binding.teacherEmailInputLayout.editText?.text.toString()
+            val teacherPhoneText = binding.teacherPhoneInputLayout.editText?.text.toString()
+            val teacherPhone =
+                try {
+                    teacherPhoneText.toInt()
+                } catch (e: Exception) {
+                    -1
+                }
+            val teacherAddress = binding.teacherAddressInputLayout.editText?.text.toString()
+            val teacherWebsite = binding.teacherWebsiteInputLayout.editText?.text.toString()
+            val teacher =
+                Teacher(0, teacherName, teacherEmail, teacherPhone, teacherAddress, teacherWebsite)
+            viewModel.onSaveButton(lessonName, des, teacher)
         }
     }
 }

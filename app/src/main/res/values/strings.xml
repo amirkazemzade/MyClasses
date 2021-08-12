@@ -37,6 +37,11 @@
     <string name="share">Share</string>
     <string name="remove">Remove</string>
     <string name="delete_session">Delete Session</string>
+    <string name="teacher_name">Teacher Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="website">Website</string>
 
 
     <string-array name="days_of_week_long">

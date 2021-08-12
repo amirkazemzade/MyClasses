@@ -16,6 +16,10 @@ data class Lesson(
     var imageName: String,
 
     @ColumnInfo(name = "description")
-    var description: String = ""
+    var description: String = "",
+
+    // -1 for not specified teacher
+    @ColumnInfo(name = "teacher_id")
+    var teacherId: Long = -1L
 )
 

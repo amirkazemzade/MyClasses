@@ -6,8 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
+import com.example.myclasses.database.entities.Teacher
 
-@Database(entities = [Lesson::class, Session::class], version = 2, exportSchema = false)
+@Database(
+    entities = [Lesson::class, Session::class, Teacher::class],
+    version = 3,
+    exportSchema = false
+)
 abstract class LessonsDatabase : RoomDatabase() {
     abstract val lessonsDatabaseDao: LessonsDatabaseDao
 
