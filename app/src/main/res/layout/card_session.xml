@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="sessionWithLesson"
-            type="com.example.myclasses.database.entities.relations.SessionWithLesson" />
+            name="sessionLessonTeacher"
+            type="com.example.myclasses.database.entities.relations.SessionLessonTeacher" />
 
         <variable
             name="clickListener"
@@ -20,7 +20,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
-        android:onClickListener="@{() -> clickListener.onClick(sessionWithLesson)}"
+        android:onClickListener="@{() -> clickListener.onClick(sessionLessonTeacher)}"
         app:cardCornerRadius="15dp">
 
 
@@ -45,10 +45,11 @@
 
                 <ImageView
                     android:id="@+id/lessonIcon"
-                    lessonIcon="@{sessionWithLesson.lesson}"
+                    lessonIcon="@{sessionLessonTeacher.lessonWithTeacher.lesson}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/lesson_picture"
+                    tools:ignore="ImageContrastCheck"
                     tools:srcCompat="@tools:sample/avatars" />
             </androidx.cardview.widget.CardView>
 
@@ -57,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{sessionWithLesson.lesson.lessonName}"
+                android:text="@{sessionLessonTeacher.lessonWithTeacher.lesson.lessonName}"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/teacherName"
                 app:layout_constraintEnd_toStartOf="@+id/time"
@@ -69,7 +70,7 @@
 
             <TextView
                 android:id="@+id/time"
-                timeFormatted="@{sessionWithLesson.session}"
+                timeFormatted="@{sessionLessonTeacher.session}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -82,11 +83,21 @@
                 tools:text="12:00 - 02:00" />
 
             <TextView
+                android:id="@+id/teacherName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{sessionLessonTeacher.lessonWithTeacher.teacher.name}"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintStart_toStartOf="@+id/lessonName"
+                app:layout_constraintTop_toBottomOf="@+id/lessonName"
+                tools:text="@string/teacher_name" />
+
+            <TextView
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="@{sessionWithLesson.lesson.description}"
+                android:text="@{sessionLessonTeacher.lessonWithTeacher.lesson.description}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -94,14 +105,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/teacherName"
                 tools:text="description description" />
 
-            <TextView
-                android:id="@+id/teacherName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/description"
-                app:layout_constraintStart_toStartOf="@+id/lessonName"
-                app:layout_constraintTop_toBottomOf="@+id/lessonName"
-                tools:text="@string/teacher_name" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

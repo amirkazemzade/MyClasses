@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
+import com.example.myclasses.database.entities.Teacher
 import kotlinx.coroutines.launch
 
 class LessonDetailsViewModel(
@@ -22,6 +23,11 @@ class LessonDetailsViewModel(
     private val _sessions = MutableLiveData<List<Session>>()
     val sessions: LiveData<List<Session>>
         get() = _sessions
+
+    private val _teacher = MutableLiveData<Teacher?>(null)
+    val teacher : LiveData<Teacher?>
+        get() = _teacher
+
 
     private val _navigateToEdit = MutableLiveData<Lesson?>()
     val navigateToEdit: LiveData<Lesson?>
@@ -47,6 +53,12 @@ class LessonDetailsViewModel(
         }
     }
 
+    fun updateTeacher(){
+        viewModelScope.launch {
+            lesson.value?.teacherId?.let { getTeacher(it) }
+        }
+    }
+
     private fun getLesson(id: Long?) {
         id?.let {
             _lesson = dataSource.getLesson(it)
@@ -55,6 +67,10 @@ class LessonDetailsViewModel(
 
     private suspend fun getSessions(lessonId: Long) {
         _sessions.value = dataSource.getSessions(lessonId)
+    }
+
+    private suspend fun getTeacher(teacherId: Long){
+        _teacher.value = dataSource.getTeacher(teacherId)
     }
 
     fun onRemove() {

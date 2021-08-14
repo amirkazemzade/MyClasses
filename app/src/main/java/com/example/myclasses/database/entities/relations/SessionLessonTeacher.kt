@@ -5,11 +5,14 @@ import androidx.room.Relation
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
 
-data class SessionWithLesson(
-    @Embedded val session: Session,
+data class SessionLessonTeacher(
+    @Embedded
+    val session: Session,
+
     @Relation(
+        entity = Lesson::class,
         parentColumn = "lesson_id",
         entityColumn = "lessonId"
     )
-    val lesson: Lesson
+    val lessonWithTeacher: LessonWithTeacher
 )

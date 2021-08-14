@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myclasses.database.entities.relations.SessionWithLesson
+import com.example.myclasses.database.entities.relations.SessionLessonTeacher
 import com.example.myclasses.databinding.CardSessionBinding
 
 class SessionsListAdapter(private val clickListener: SessionClickListener) :
-    ListAdapter<SessionWithLesson, SessionsListAdapter.ViewHolder>(SessionDiffCallBack()) {
+    ListAdapter<SessionLessonTeacher, SessionsListAdapter.ViewHolder>(SessionDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -23,8 +23,8 @@ class SessionsListAdapter(private val clickListener: SessionClickListener) :
     class ViewHolder private constructor(private val binding: CardSessionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SessionWithLesson, clickListener: SessionClickListener) {
-            binding.sessionWithLesson = item
+        fun bind(item: SessionLessonTeacher, clickListener: SessionClickListener) {
+            binding.sessionLessonTeacher = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -39,20 +39,23 @@ class SessionsListAdapter(private val clickListener: SessionClickListener) :
     }
 }
 
-class SessionDiffCallBack : DiffUtil.ItemCallback<SessionWithLesson>() {
+class SessionDiffCallBack : DiffUtil.ItemCallback<SessionLessonTeacher>() {
 
-    override fun areItemsTheSame(oldItem: SessionWithLesson, newItem: SessionWithLesson): Boolean {
+    override fun areItemsTheSame(
+        oldItem: SessionLessonTeacher,
+        newItem: SessionLessonTeacher
+    ): Boolean {
         return oldItem.session.sessionId == newItem.session.sessionId
     }
 
     override fun areContentsTheSame(
-        oldItem: SessionWithLesson,
-        newItem: SessionWithLesson
+        oldItem: SessionLessonTeacher,
+        newItem: SessionLessonTeacher
     ): Boolean {
         return oldItem == newItem
     }
 }
 
-class SessionClickListener(val clickListener: (sessionWithLesson: SessionWithLesson) -> Unit) {
-    fun onClick(sessionWithLesson: SessionWithLesson) = clickListener(sessionWithLesson)
+class SessionClickListener(val clickListener: (sessionLessonTeacher: SessionLessonTeacher) -> Unit) {
+    fun onClick(sessionLessonTeacher: SessionLessonTeacher) = clickListener(sessionLessonTeacher)
 }

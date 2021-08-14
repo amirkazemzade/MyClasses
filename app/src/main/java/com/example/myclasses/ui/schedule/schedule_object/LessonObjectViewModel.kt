@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.example.myclasses.database.LessonsDatabaseDao
 import com.example.myclasses.database.Settings
-import com.example.myclasses.database.entities.relations.SessionWithLesson
+import com.example.myclasses.database.entities.relations.SessionLessonTeacher
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
@@ -52,8 +52,8 @@ class LessonObjectViewModel(
     }
 
     // list of lessons of this day
-    private lateinit var _todaySessions: LiveData<List<SessionWithLesson>>
-    val todaySessions: LiveData<List<SessionWithLesson>>
+    private lateinit var _todaySessions: LiveData<List<SessionLessonTeacher>>
+    val todaySessions: LiveData<List<SessionLessonTeacher>>
         get() = _todaySessions
 
     init {
@@ -63,7 +63,7 @@ class LessonObjectViewModel(
         getState()
 
         viewModelScope.launch {
-            getTodayLessons()
+            getTodaySessions()
         }
     }
 
@@ -113,11 +113,11 @@ class LessonObjectViewModel(
     }
 
     // gets today's lessons from database
-    private fun getTodayLessons() {
+    private fun getTodaySessions() {
         _todaySessions =
             day.value?.let { day ->
                 state.value?.let { state ->
-                    dataSource.getSessionsWithLessonOfDay(day, state)
+                    dataSource.getSessionsOfDay(day, state)
                 }
             }!!
     }

@@ -6,7 +6,7 @@ import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
 import com.example.myclasses.database.entities.Teacher
 import com.example.myclasses.database.entities.relations.LessonWithSessions
-import com.example.myclasses.database.entities.relations.SessionWithLesson
+import com.example.myclasses.database.entities.relations.SessionLessonTeacher
 
 @Dao
 interface LessonsDatabaseDao {
@@ -50,7 +50,7 @@ interface LessonsDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM session_table WHERE day_of_week = :day AND (week_state = :state OR week_state = 0) ORDER BY start_time ASC")
-    fun getSessionsWithLessonOfDay(day: Int, state: Int): LiveData<List<SessionWithLesson>>
+    fun getSessionsOfDay(day: Int, state: Int): LiveData<List<SessionLessonTeacher>>
 
     @Delete
     suspend fun deleteLesson(lesson: Lesson)

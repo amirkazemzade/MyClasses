@@ -39,6 +39,7 @@ class LessonDetailsFragment : Fragment() {
         viewModel.lesson.observe(viewLifecycleOwner, {
             it.let {
                 viewModel.updateSessions()
+                viewModel.updateTeacher()
             }
         })
 

@@ -54,7 +54,7 @@ class NewLessonFragment : Fragment() {
             viewModel.getLessonWithSessions(text.toString())
         }
 
-        binding.teacherNameInputLayout.editText?.doOnTextChanged { text, start, before, count ->
+        binding.teacherNameInputLayout.editText?.doOnTextChanged { text, _, _, _ ->
             viewModel.getTeacher(text.toString())
         }
 
@@ -170,10 +170,6 @@ class NewLessonFragment : Fragment() {
                 }
             }
         })
-
-        binding.addNewSession.setOnClickListener {
-            viewModel.addNewSession()
-        }
 
         viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
             value?.let {
