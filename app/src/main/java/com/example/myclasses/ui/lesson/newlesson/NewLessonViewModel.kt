@@ -17,28 +17,37 @@ class NewLessonViewModel(
 ) :
     ViewModel() {
 
+    // list of all lessons
     val lessons = dataSource.getLessons()
 
+    // list of all teachers
     val teachers = dataSource.getTeachers()
 
+    // current selected lesson
     private var _currentLesson = MutableLiveData<Lesson?>()
     val currentLesson: LiveData<Lesson?>
         get() = _currentLesson
 
+    // was previous value of current lesson null or not
     private var wasLessonNull = false
 
-    private var wasTeacherNull = false
-
+    // list of sessions of current lesson
     private var _currentSessions = MutableLiveData<List<Session>>()
     val currentSessions: LiveData<List<Session>>
         get() = _currentSessions
 
+    // list of sessions that should be removed
     private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
 
+    // teacher of current lesson
     private val _currentTeacher = MutableLiveData<Teacher?>(null)
     val currentTeacher: LiveData<Teacher?>
         get() = _currentTeacher
 
+    // was previous value of current teacher null or not
+    private var wasTeacherNull = false
+
+    // weather teacher menu is expanded or not
     private var _isTeacherMenuExpended = MutableLiveData(false)
     val isTeacherMenuExpended: LiveData<Boolean>
         get() = _isTeacherMenuExpended
@@ -76,6 +85,14 @@ class NewLessonViewModel(
         }
     }
 
+    // function that inserts the current teacher to database
+    private suspend fun insertTeacher() {
+        _currentTeacher.value?.let { teacher ->
+            dataSource.insertTeacher(teacher)
+            getTeacher(teacher.name)
+        }
+    }
+
     // gets lesson and its sessions by name of lesson
     fun getLessonWithSessions(name: String) {
         viewModelScope.launch {
@@ -83,13 +100,6 @@ class NewLessonViewModel(
             getSessions()
             getTeacherOfLesson()
             wasLessonNull = currentLesson.value == null
-        }
-    }
-
-    private suspend fun insertTeacher() {
-        _currentTeacher.value?.let { teacher ->
-            dataSource.insertTeacher(teacher)
-            getTeacher(teacher.name)
         }
     }
 
@@ -251,5 +261,4 @@ class NewLessonViewModel(
     fun refreshIsTeacherMenuExpanded() {
         _isTeacherMenuExpended.value = _isTeacherMenuExpended.value
     }
-
 }

@@ -58,23 +58,23 @@ class NewLessonFragment : Fragment() {
             viewModel.getTeacher(text.toString())
         }
 
-        viewModel.currentLesson.observe(viewLifecycleOwner, { lesson ->
+        viewModel.currentLesson.observe(viewLifecycleOwner) { lesson ->
             if (lesson != null) {
                 binding.description.editText?.setText(lesson.description)
             } else {
                 binding.description.editText?.setText("")
             }
-        })
+        }
 
-        viewModel.currentSessions.observe(viewLifecycleOwner, { list ->
+        viewModel.currentSessions.observe(viewLifecycleOwner) { list ->
             val adapter = AddSessionListAdapter(SessionDeleteClickListener {
                 viewModel.removeSession(it)
             })
             adapter.submitList(list)
             binding.sessionsList.adapter = adapter
-        })
+        }
 
-        viewModel.currentTeacher.observe(viewLifecycleOwner, { teacher ->
+        viewModel.currentTeacher.observe(viewLifecycleOwner) { teacher ->
             if (teacher != null) {
                 if (binding.teacherNameInputLayout.editText?.text.toString() != teacher.name)
                     binding.teacherNameInputLayout.editText?.setText(teacher.name)
@@ -111,7 +111,7 @@ class NewLessonFragment : Fragment() {
                 binding.teacherFieldsGroup.visibility = View.GONE
             }
             viewModel.refreshIsTeacherMenuExpanded()
-        })
+        }
 
         binding.lessonIconPicture.setOnClickListener {
             val dialog = AlertDialog.Builder(context).create()
@@ -131,7 +131,7 @@ class NewLessonFragment : Fragment() {
             dialog.show()
         }
 
-        viewModel.isTeacherMenuExpended.observe(viewLifecycleOwner, { value ->
+        viewModel.isTeacherMenuExpended.observe(viewLifecycleOwner) { value ->
             when (value) {
                 false -> {
                     val noTeacher = binding.teacherNameInputLayout.editText?.text.toString() == ""
@@ -169,7 +169,7 @@ class NewLessonFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
         viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
             value?.let {
@@ -204,11 +204,12 @@ class NewLessonFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.ic_baseline_clear_24)
-            title = "Add New Lesson"
+            title = getString(R.string.add_new_lesson)
             setDisplayHomeAsUpEnabled(true)
         }
     }
 
+    // action menu configurations
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.save_menu, menu)

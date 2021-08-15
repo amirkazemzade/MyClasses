@@ -42,7 +42,8 @@
     <string name="phone">Phone</string>
     <string name="address">Address</string>
     <string name="website">Website</string>
-
+    <string name="add_new_lesson">Add New Lesson</string>
+    <string name="edit_lesson">Edit Lesson</string>
 
     <string-array name="days_of_week_long">
         <item>Sunday</item>
