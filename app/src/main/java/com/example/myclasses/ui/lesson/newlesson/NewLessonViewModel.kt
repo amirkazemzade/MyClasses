@@ -113,8 +113,9 @@ class NewLessonViewModel(
     // gets sessions list from database by id of lesson
     private suspend fun getSessions() {
         viewModelScope.launch {
-            val lessonId = if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
             if (!wasLessonNull || currentLesson.value != null) {
+                val lessonId =
+                    if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
                 _currentSessions.value = dataSource.getSessions(lessonId)
                 addNewSession()
             }
@@ -123,12 +124,14 @@ class NewLessonViewModel(
 
     // gets saved teacher of current lesson from database
     private suspend fun getTeacherOfLesson() {
-        if (currentLesson.value != null && currentLesson.value?.teacherId != -1L) {
-            currentLesson.value?.teacherId?.let { id ->
-                _currentTeacher.value = dataSource.getTeacher(id)
+        if (!wasLessonNull || currentLesson.value != null) {
+            if (currentLesson.value != null && currentLesson.value?.teacherId != -1L) {
+                currentLesson.value?.teacherId?.let { id ->
+                    _currentTeacher.value = dataSource.getTeacher(id)
+                }
+            } else {
+                _currentTeacher.value = null
             }
-        } else {
-            _currentTeacher.value = null
         }
     }
 
