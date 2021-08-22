@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.editlesson
+package com.example.myclasses.ui.lesson.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

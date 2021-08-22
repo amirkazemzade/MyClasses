@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.editlesson.EditLessonViewModel" />
+            type="com.example.myclasses.ui.lesson.edit.EditLessonViewModel" />
 
     </data>
 

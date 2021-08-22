@@ -16,8 +16,8 @@
             app:popUpTo="@id/nav_schedule" />
         <argument
             android:name="currentTabId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
         <action
             android:id="@+id/action_nav_schedule_to_lessonDetailsFragment"
             app:destination="@id/lessonDetailsFragment" />
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.myclasses.ui.settings.SettingsFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
@@ -38,32 +38,32 @@
     <fragment
         android:id="@+id/newLessonFragment"
         android:name="com.example.myclasses.ui.lesson.newlesson.NewLessonFragment"
-        android:label="NewLessonFragment"
+        android:label="New Lesson"
         tools:layout="@layout/fragment_new_lesson">
 
         <argument
             android:name="dayId"
-            app:argType="integer"
-            android:defaultValue="7" />
+            android:defaultValue="7"
+            app:argType="integer" />
         <action
             android:id="@+id/action_newLessonFragment_to_nav_lesson"
             app:destination="@id/nav_schedule" />
         <argument
             android:name="tabId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
     <fragment
         android:id="@+id/lesson_object_fragment"
         android:name="com.example.myclasses.ui.schedule.schedule_object.LessonObjectFragment"
         android:label="LessonObjectFragment"
-        tools:layout="@layout/fragment_sessions_of_day"/>
+        tools:layout="@layout/fragment_sessions_of_day" />
     <fragment
         android:id="@+id/lessonDetailsFragment"
-        android:name="com.example.myclasses.ui.lesson.lessondetails.LessonDetailsFragment"
-        android:label="LessonDetailsFragment"
-        tools:layout="@layout/fragment_lesson_details" >
+        android:name="com.example.myclasses.ui.lesson.details.LessonDetailsFragment"
+        android:label="Lesson Details"
+        tools:layout="@layout/fragment_lesson_details">
         <argument
             android:name="lessonId"
             app:argType="long" />
@@ -73,11 +73,61 @@
     </fragment>
     <fragment
         android:id="@+id/editLessonFragment"
-        android:name="com.example.myclasses.ui.lesson.editlesson.EditLessonFragment"
-        android:label="EditLessonFragment"
+        android:name="com.example.myclasses.ui.lesson.edit.EditLessonFragment"
+        android:label="@string/edit_lesson"
         tools:layout="@layout/fragment_edit_lesson">
         <argument
             android:name="lessonId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonListFragment"
+        android:name="com.example.myclasses.ui.lesson.list.LessonListFragment"
+        android:label="@string/lessons"
+        tools:layout="@layout/fragment_lesson_list">
+        <action
+            android:id="@+id/action_lessonListFragment_to_lessonDetailsFragment"
+            app:destination="@id/lessonDetailsFragment" />
+        <action
+            android:id="@+id/action_lessonListFragment_to_newLessonFragment"
+            app:destination="@id/newLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherListFragment"
+        android:name="com.example.myclasses.ui.teacher.list.TeacherListFragment"
+        android:label="@string/teachers"
+        tools:layout="@layout/fragment_teacher_list" >
+        <action
+            android:id="@+id/action_teacherListFragment_to_teacherDetailsFragment"
+            app:destination="@id/teacherDetailsFragment" />
+        <action
+            android:id="@+id/action_teacherListFragment_to_newTeacherFragment"
+            app:destination="@id/newTeacherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherDetailsFragment"
+        android:name="com.example.myclasses.ui.teacher.details.TeacherDetailsFragment"
+        android:label="Teacher Details"
+        tools:layout="@layout/fragment_teacher_details">
+        <argument
+            android:name="teacherId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_teacherDetailsFragment_to_editTeacherFragment"
+            app:destination="@id/editTeacherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newTeacherFragment"
+        android:name="com.example.myclasses.ui.teacher.newteacher.NewTeacherFragment"
+        android:label="NewTeacherFragment"
+        tools:layout="@layout/fragment_new_teacher"/>
+    <fragment
+        android:id="@+id/editTeacherFragment"
+        android:name="com.example.myclasses.ui.teacher.edit.EditTeacherFragment"
+        android:label="EditTeacherFragment"
+        tools:layout="@layout/fragment_edit_teacher">
+        <argument
+            android:name="teacherId"
             app:argType="long" />
     </fragment>
 

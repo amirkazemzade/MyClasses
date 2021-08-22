@@ -1,14 +1,14 @@
 package com.example.myclasses
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
+import com.example.myclasses.database.entities.Teacher
 import java.text.DateFormat
-import java.util.*
 
 @BindingAdapter("lessonIcon")
 fun ImageView.setLessonIcon(item: Lesson?) {
@@ -35,14 +35,6 @@ fun ImageView.setPictureIcon(pictureName: String?) {
     pictureName?.let {
         val id = resources.getIdentifier(pictureName, "drawable", context.packageName)
         setImageDrawable(AppCompatResources.getDrawable(context, id))
-    }
-}
-
-@BindingAdapter("timeAsString")
-fun TextView.setTime(calendar: LiveData<Calendar>?) {
-    calendar?.let {
-        val date = calendar.value?.timeInMillis?.let { cal -> Date(cal) }
-        text = DateFormat.getTimeInstance(DateFormat.SHORT).format(date)
     }
 }
 
@@ -83,4 +75,15 @@ fun TextView.setWeekState(item: Session?) {
 @BindingAdapter("sessionName")
 fun TextView.setSessionName(position: Int) {
     text = resources.getString(R.string.session_name, position + 1)
+}
+
+@BindingAdapter("teacherName")
+fun TextView.setTeacherName(item: Teacher?) {
+    if (item != null) {
+        text = item.name
+        visibility = View.VISIBLE
+    } else {
+        text = ""
+        visibility = View.GONE
+    }
 }

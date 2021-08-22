@@ -44,6 +44,9 @@
     <string name="website">Website</string>
     <string name="add_new_lesson">Add New Lesson</string>
     <string name="edit_lesson">Edit Lesson</string>
+    <string name="lessons">Lessons</string>
+    <string name="teachers">Teachers</string>
+    <string name="teacher_icon">Teacher Icon</string>
 
     <string-array name="days_of_week_long">
         <item>Sunday</item>

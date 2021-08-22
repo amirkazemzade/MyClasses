@@ -13,8 +13,12 @@
             android:icon="@drawable/ic_baseline_settings_24"
             android:title="@string/settings" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/lessonListFragment"
+            android:icon="@drawable/ic_baseline_class_24"
+            android:title="@string/lessons" />
+        <item
+            android:id="@+id/teacherListFragment"
+            android:icon="@drawable/ic_baseline_person_24"
+            android:title="@string/teachers" />
     </group>
 </menu>

@@ -1,5 +1,7 @@
-package com.example.myclasses.ui.lesson.lessondetails
+package com.example.myclasses.ui.lesson.details
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myclasses.convertLessonToStringForShare
 import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.databinding.FragmentLessonDetailsBinding
 
@@ -43,14 +46,35 @@ class LessonDetailsFragment : Fragment() {
             }
         })
 
+        val adapter = SessionDetailsListAdapter()
+        binding.sessionsList.adapter = adapter
+        binding.sessionsList.layoutManager = GridLayoutManager(context, 2)
+
         viewModel.sessions.observe(viewLifecycleOwner, {
             it?.let {
-                val adapter = SessionDetailsListAdapter()
                 adapter.submitList(it)
-                binding.sessionsList.adapter = adapter
-                binding.sessionsList.layoutManager = GridLayoutManager(context, 2)
             }
         })
+
+        binding.remove.setOnClickListener {
+            onRemove()
+        }
+
+        binding.share.setOnClickListener {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                val lesson = viewModel.lesson.value!!
+                val sessions = viewModel.sessions.value!!
+                val teacher = viewModel.teacher.value
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    convertLessonToStringForShare(lesson, sessions, teacher, resources)
+                )
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
 
         viewModel.navigateToEdit.observe(viewLifecycleOwner, { lesson ->
             lesson?.let {
@@ -71,5 +95,19 @@ class LessonDetailsFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun onRemove() {
+        val alertDialogBuilder = AlertDialog.Builder(context).apply {
+            setMessage("Are you sure you want to Delete?")
+            setPositiveButton("Yes") { _, _ ->
+                viewModel.onRemove()
+            }
+            setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        alertDialogBuilder.create().show()
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lessondetails
+package com.example.myclasses.ui.lesson.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,7 +25,7 @@ class LessonDetailsViewModel(
         get() = _sessions
 
     private val _teacher = MutableLiveData<Teacher?>(null)
-    val teacher : LiveData<Teacher?>
+    val teacher: LiveData<Teacher?>
         get() = _teacher
 
 
@@ -53,7 +53,7 @@ class LessonDetailsViewModel(
         }
     }
 
-    fun updateTeacher(){
+    fun updateTeacher() {
         viewModelScope.launch {
             lesson.value?.teacherId?.let { getTeacher(it) }
         }
@@ -69,7 +69,7 @@ class LessonDetailsViewModel(
         _sessions.value = dataSource.getSessions(lessonId)
     }
 
-    private suspend fun getTeacher(teacherId: Long){
+    private suspend fun getTeacher(teacherId: Long) {
         _teacher.value = dataSource.getTeacher(teacherId)
     }
 

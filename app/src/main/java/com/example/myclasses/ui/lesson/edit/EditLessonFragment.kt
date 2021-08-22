@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.editlesson
+package com.example.myclasses.ui.lesson.edit
 
 import android.app.AlertDialog
 import android.os.Bundle

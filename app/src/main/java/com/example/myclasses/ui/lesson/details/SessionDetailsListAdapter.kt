@@ -1,4 +1,4 @@
-package com.example.myclasses.ui.lesson.lessondetails
+package com.example.myclasses.ui.lesson.details
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

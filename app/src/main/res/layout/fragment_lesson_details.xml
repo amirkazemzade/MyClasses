@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.myclasses.ui.lesson.lessondetails.LessonDetailsViewModel" />
+            type="com.example.myclasses.ui.lesson.details.LessonDetailsViewModel" />
 
     </data>
 
@@ -22,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:onClick="@{() -> viewModel.onEdit()}"
             android:text="@string/edit"
             android:textColor="#000000"
-            android:onClick="@{() -> viewModel.onEdit()}"
             app:icon="@drawable/ic_edit"
             app:iconGravity="textTop"
             app:iconTint="#000000"
@@ -56,7 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/remove"
-            android:onClick="@{() -> viewModel.onRemove()}"
             android:textColor="#000000"
             app:icon="@drawable/ic_delete"
             app:iconGravity="textTop"
@@ -74,8 +73,10 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/share"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,24 +99,42 @@
                     android:id="@+id/lessonName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="8dp"
                     android:text="@{viewModel.lesson.lessonName}"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/lessonPicture"
                     app:layout_constraintStart_toStartOf="@+id/lessonPicture"
                     app:layout_constraintTop_toBottomOf="@+id/lessonPicture"
                     tools:text="Lesson Name" />
 
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/descriptionCardView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:text="@{viewModel.lesson.description}"
-                    app:layout_constraintEnd_toEndOf="@+id/lessonName"
-                    app:layout_constraintStart_toStartOf="@+id/lessonName"
-                    app:layout_constraintTop_toBottomOf="@+id/lessonName"
-                    tools:text="description" />
+                    android:layout_marginEnd="24dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsTeacherNameCardView">
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:text="@{viewModel.lesson.description}"
+                        app:drawableStartCompat="@drawable/ic_baseline_description_24"
+                        tools:text="description" />
+
+                </androidx.cardview.widget.CardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sessionsList"
@@ -128,8 +147,35 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/description"
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionCardView"
                     app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/detailsTeacherNameCardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="@+id/lessonName"
+                    app:layout_constraintStart_toStartOf="@+id/lessonName"
+                    app:layout_constraintTop_toBottomOf="@+id/lessonName">
+
+                    <TextView
+                        android:id="@+id/detailsTeacherName"
+                        teacherName="@{viewModel.teacher}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:drawablePadding="4dp"
+                        android:gravity="center|center_vertical"
+                        android:visibility="gone"
+                        app:drawableStartCompat="@drawable/ic_baseline_person_24"
+                        tools:text="Teacher Name"
+                        tools:visibility="visible" />
+                </androidx.cardview.widget.CardView>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
