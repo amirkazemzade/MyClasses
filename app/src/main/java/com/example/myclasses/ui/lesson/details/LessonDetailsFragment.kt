@@ -76,16 +76,23 @@ class LessonDetailsFragment : Fragment() {
             startActivity(shareIntent)
         }
 
-        viewModel.navigateToEdit.observe(viewLifecycleOwner, { lesson ->
-            lesson?.let {
-                val action =
-                    LessonDetailsFragmentDirections.actionLessonDetailsFragmentToEditLessonFragment(
-                        it.lessonId
-                    )
+        viewModel.navigateToEdit.observe(viewLifecycleOwner) {
+            it?.let { lesson ->
+                val action = LessonDetailsFragmentDirections
+                    .actionLessonDetailsFragmentToEditLessonFragment(lesson.lessonId)
                 findNavController().navigate(action)
                 viewModel.onNavigateToEditDone()
             }
-        })
+        }
+
+        viewModel.navigateToTeacherDetails.observe(viewLifecycleOwner) {
+            it?.let { teacher ->
+                val action = LessonDetailsFragmentDirections
+                    .actionLessonDetailsFragmentToTeacherDetailsFragment(teacher.teacherId)
+                findNavController().navigate(action)
+                viewModel.onNavigateToTeacherDetailsDone()
+            }
+        }
 
         viewModel.navigateUp.observe(viewLifecycleOwner, {
             it?.let {

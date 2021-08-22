@@ -28,10 +28,13 @@ class LessonDetailsViewModel(
     val teacher: LiveData<Teacher?>
         get() = _teacher
 
-
     private val _navigateToEdit = MutableLiveData<Lesson?>()
     val navigateToEdit: LiveData<Lesson?>
         get() = _navigateToEdit
+
+    private val _navigateToTeacherDetails = MutableLiveData<Teacher?>()
+    val navigateToTeacherDetails: LiveData<Teacher?>
+        get() = _navigateToTeacherDetails
 
     private val _navigateUp = MutableLiveData<Boolean?>()
     val navigateUp: LiveData<Boolean?>
@@ -87,12 +90,20 @@ class LessonDetailsViewModel(
         _navigateToEdit.value = lesson.value
     }
 
+    fun onTeacherClicked() {
+        _navigateToTeacherDetails.value = teacher.value
+    }
+
     fun onNavigateUpDone() {
         _navigateUp.value = null
     }
 
     fun onNavigateToEditDone() {
         _navigateToEdit.value = null
+    }
+
+    fun onNavigateToTeacherDetailsDone() {
+        _navigateToTeacherDetails.value = null
     }
 
 }
