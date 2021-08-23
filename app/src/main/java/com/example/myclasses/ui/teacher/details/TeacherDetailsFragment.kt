@@ -2,6 +2,7 @@ package com.example.myclasses.ui.teacher.details
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,47 @@ class TeacherDetailsFragment : Fragment() {
                 } else binding.websiteCardView.visibility = View.GONE
             }
         })
+
+        binding.emailCardView.setOnClickListener {
+            val email = viewModel.teacher.value?.email!!
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            }
+            val packageManager = activity?.packageManager!!
+            if (intent.resolveActivity(packageManager) != null)
+                startActivity(intent)
+        }
+
+        binding.phoneCardView.setOnClickListener {
+            val phone = viewModel.teacher.value?.phoneNumber!!
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$phone")
+            }
+            val packageManager = activity?.packageManager!!
+            if (intent.resolveActivity(packageManager) != null)
+                startActivity(intent)
+        }
+        binding.addressCardView.setOnClickListener {
+            val address = viewModel.teacher.value?.address!!
+            val uri = Uri.parse("geo:0,0?q=$address")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            val packageManager = activity?.packageManager!!
+            if (intent.resolveActivity(packageManager) != null)
+                startActivity(intent)
+        }
+        binding.websiteCardView.setOnClickListener {
+            val website = viewModel.teacher.value?.websiteAddress!!
+            val uri =
+                if (website.startsWith("https://") || website.startsWith("http://"))
+                    Uri.parse(website)
+                else
+                    Uri.parse("https://$website")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            val packageManager = activity?.packageManager!!
+            if (intent.resolveActivity(packageManager) != null)
+                startActivity(intent)
+        }
 
         binding.remove.setOnClickListener { onRemove() }
 
