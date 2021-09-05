@@ -8,6 +8,7 @@ import com.example.myclasses.database.entities.Teacher
 import com.example.myclasses.database.entities.relations.LessonWithSessions
 import com.example.myclasses.database.entities.relations.LessonWithTeacher
 import com.example.myclasses.database.entities.relations.SessionLessonTeacher
+import com.example.myclasses.database.entities.relations.SessionWithLesson
 
 @Dao
 interface LessonsDatabaseDao {
@@ -48,6 +49,9 @@ interface LessonsDatabaseDao {
 
     @Query("SELECT * FROM session_table WHERE lesson_id = :lessonId")
     suspend fun getSessions(lessonId: Long): List<Session>
+
+    @Query("SELECT * FROM session_table")
+    suspend fun getSessions(): List<SessionWithLesson>
 
     @Query("SELECT * FROM teacher_table WHERE teacherId = :teacherId")
     suspend fun getTeacher(teacherId: Long): Teacher?

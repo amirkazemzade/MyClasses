@@ -1,6 +1,10 @@
 package com.example.myclasses.ui.lesson.newlesson
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
@@ -12,15 +16,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myclasses.R
 import com.example.myclasses.database.LessonsDatabase
+import com.example.myclasses.database.Settings
 import com.example.myclasses.database.entities.Teacher
 import com.example.myclasses.databinding.DialogPictureListBinding
 import com.example.myclasses.databinding.FragmentNewLessonBinding
+import com.example.myclasses.getNextSessionInMilli
+import com.example.myclasses.receiver.AlarmReceiver
 
 class NewLessonFragment : Fragment() {
 
     private lateinit var binding: FragmentNewLessonBinding
     private lateinit var viewModel: NewLessonViewModel
     private lateinit var viewModelFactory: NewLessonViewModelFactory
+    private lateinit var alarmManager: AlarmManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +40,7 @@ class NewLessonFragment : Fragment() {
         val dataSource =
             activity?.let { LessonsDatabase.getInstance(it.application).lessonsDatabaseDao }!!
         val arguments = NewLessonFragmentArgs.fromBundle(requireArguments())
+        alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         viewModelFactory = NewLessonViewModelFactory(arguments.tabId, arguments.dayId, dataSource)
         viewModel = ViewModelProvider(this, viewModelFactory).get(NewLessonViewModel::class.java)
@@ -171,15 +180,6 @@ class NewLessonFragment : Fragment() {
             }
         }
 
-        viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
-            value?.let {
-                val action = NewLessonFragmentDirections.actionNewLessonFragmentToNavLesson()
-                action.currentTabId = value
-                findNavController().navigate(action)
-                viewModel.doneNavigatingToLessonFragment()
-            }
-        })
-
         viewModel.lessons.observe(viewLifecycleOwner, { lessons ->
             val adapter = ArrayAdapter(
                 requireContext(),
@@ -196,6 +196,64 @@ class NewLessonFragment : Fragment() {
                 teachers
             )
             binding.teacherNameMenu.setAdapter(adapter)
+        })
+
+        viewModel.setAlarm.observe(viewLifecycleOwner) {
+            it?.let { lesson ->
+                val settings =
+                    Settings(activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!)
+                viewModel.currentSessions.value?.forEach { session ->
+                    if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.sessionId >= 0) {
+                        val intent = Intent(context, AlarmReceiver::class.java).apply {
+                            putExtra("session_id", session.sessionId)
+                            putExtra("lesson_id", lesson.lessonId)
+                            putExtra("lesson_name", lesson.lessonName)
+                        }
+                        val pendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            session.sessionId.toInt(),
+                            intent,
+                            0
+                        )
+
+                        val weekGap = if (session.weekState == 0) 1 else 2
+                        alarmManager.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            session.getNextSessionInMilli(settings),
+                            AlarmManager.INTERVAL_DAY * 7 * weekGap,
+                            pendingIntent
+                        )
+                    }
+                }
+                viewModel.sessionRemoveList.value?.forEach { session ->
+                    val intent = Intent(context, AlarmReceiver::class.java).apply {
+                        putExtra("session_id", session.sessionId)
+                        putExtra("lesson_id", lesson.lessonId)
+                        putExtra("lesson_name", lesson.lessonName)
+                    }
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        session.sessionId.toInt(),
+                        intent,
+                        0
+                    )
+
+                    pendingIntent?.let {
+                        alarmManager.cancel(pendingIntent)
+                    }
+                }
+                viewModel.onNavigateToLessonFragment()
+                viewModel.doneSettingAlarm()
+            }
+        }
+
+        viewModel.navigateToLessonFragment.observe(viewLifecycleOwner, { value ->
+            value?.let {
+                val action = NewLessonFragmentDirections.actionNewLessonFragmentToNavLesson()
+                action.currentTabId = value
+                findNavController().navigate(action)
+                viewModel.doneNavigatingToLessonFragment()
+            }
         })
     }
 

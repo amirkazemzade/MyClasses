@@ -2,6 +2,7 @@ package com.example.myclasses
 
 import android.content.res.Resources
 import android.widget.AutoCompleteTextView
+import com.example.myclasses.database.Settings
 import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
 import com.example.myclasses.database.entities.Teacher
@@ -67,4 +68,27 @@ fun convertTeacherToStringForShare(teacher: Teacher): String {
 fun AutoCompleteTextView.select(position: Int) {
     val itemText = adapter.getItem(position).toString()
     setText(itemText, false)
+}
+
+fun Session.getNextSessionInMilli(settings: Settings): Long {
+    val today = Calendar.getInstance()
+    val startCal = Calendar.getInstance().apply { timeInMillis = startTime }
+    val calendar = Calendar.getInstance().apply {
+        firstDayOfWeek = settings.firstDayOfWeek
+        set(Calendar.DAY_OF_WEEK, dayOfWeek)
+        set(Calendar.HOUR_OF_DAY, startCal.get(Calendar.HOUR_OF_DAY))
+        set(Calendar.MINUTE, startCal.get(Calendar.MINUTE) - 5)
+        set(Calendar.SECOND, 0)
+    }
+
+    var daysToAdd = 0
+    if ((weekState == 1 && !settings.isWeekEven) || (weekState == 2 && settings.isWeekEven))
+        daysToAdd += 7
+    else if (today.timeInMillis > calendar.timeInMillis) {
+        daysToAdd += if (weekState != 0) 14 else 7
+    }
+
+    calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + daysToAdd)
+
+    return calendar.timeInMillis
 }

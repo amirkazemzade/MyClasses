@@ -1,6 +1,9 @@
 package com.example.myclasses
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.navigation.NavigationView
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        pref = getPreferences(MODE_PRIVATE)
+        pref = getSharedPreferences("settings", MODE_PRIVATE)
         settings = Settings(pref)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,6 +50,27 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.session_reminders)
+            val des = getString(R.string.session_reminders_des)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val channel = NotificationChannel(
+                getString(R.string.session_reminders_id),
+                name,
+                importance
+            ).apply {
+                description = des
+            }
+
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

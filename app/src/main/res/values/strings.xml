@@ -47,6 +47,9 @@
     <string name="lessons">Lessons</string>
     <string name="teachers">Teachers</string>
     <string name="teacher_icon">Teacher Icon</string>
+    <string name="session_reminders">Session Reminders</string>
+    <string name="session_reminders_des">Reminders of session that you have created</string>
+    <string name="session_reminders_id">session_reminders_id</string>
 
     <string-array name="days_of_week_long">
         <item>Sunday</item>

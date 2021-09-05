@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.myclasses.database.LessonsDatabaseDao
 
 class LessonCollectionViewModelFactory(
     private val moveToToday: Int,
     private val preferences: SharedPreferences,
-    private val application: Application
+    private val application: Application,
+    private val dataSource: LessonsDatabaseDao
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

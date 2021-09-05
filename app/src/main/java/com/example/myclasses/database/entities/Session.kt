@@ -1,9 +1,13 @@
 package com.example.myclasses.database.entities
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
+//TODO change all entities primary key from long to int
 @Entity(tableName = "session_table")
 data class Session(
     @PrimaryKey(autoGenerate = true)
@@ -25,4 +29,4 @@ data class Session(
 
     @ColumnInfo(name = "lesson_id")
     var lessonId: Long
-)
+): Serializable

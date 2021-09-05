@@ -1,5 +1,6 @@
 package com.example.myclasses.ui.schedule.schedule_collection
 
+
 import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -9,7 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.myclasses.R
 import com.example.myclasses.database.Settings
 import java.util.*
-
 class ScheduleCollectionViewModel(
     moveToDay: Int,
     preferences: SharedPreferences,

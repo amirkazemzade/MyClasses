@@ -37,7 +37,9 @@ class NewLessonViewModel(
         get() = _currentSessions
 
     // list of sessions that should be removed
-    private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+    private var _sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+    val sessionRemoveList: LiveData<MutableList<Session>>
+        get() = _sessionRemoveList
 
     // teacher of current lesson
     private val _currentTeacher = MutableLiveData<Teacher?>(null)
@@ -61,6 +63,10 @@ class NewLessonViewModel(
     private var _pictureList = MutableLiveData<List<String>>()
     val pictureList: LiveData<List<String>>
         get() = _pictureList
+
+    private val _setAlarm = MutableLiveData<Lesson?>()
+    val setAlarm: LiveData<Lesson?>
+        get() = _setAlarm
 
     // weather to navigate to LessonFragment or not and it's arg value
     private var _navigateToLessonFragment = MutableLiveData<Int?>()
@@ -112,13 +118,11 @@ class NewLessonViewModel(
 
     // gets sessions list from database by id of lesson
     private suspend fun getSessions() {
-        viewModelScope.launch {
-            if (!wasLessonNull || currentLesson.value != null) {
-                val lessonId =
-                    if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
-                _currentSessions.value = dataSource.getSessions(lessonId)
-                addNewSession()
-            }
+        if (!wasLessonNull || currentLesson.value != null) {
+            val lessonId =
+                if (currentLesson.value != null) currentLesson.value?.lessonId!! else -1
+            _currentSessions.value = dataSource.getSessions(lessonId)
+            addNewSession()
         }
     }
 
@@ -180,13 +184,21 @@ class NewLessonViewModel(
     fun removeSession(session: Session) {
         val list = currentSessions.value as MutableList
         list.remove(session)
-        sessionRemoveList.value?.add(session)
+        _sessionRemoveList.value?.add(session)
         _currentSessions.value = list
+    }
+
+    fun onNavigateToLessonFragment() {
+        _navigateToLessonFragment.value = dayId
     }
 
     // resets value of navigation after navigation has done
     fun doneNavigatingToLessonFragment() {
         _navigateToLessonFragment.value = null
+    }
+
+    fun doneSettingAlarm() {
+        _setAlarm.value = null
     }
 
     // sets list of available images for lesson image
@@ -226,9 +238,11 @@ class NewLessonViewModel(
                         dataSource.insertSession(session)
                     }
                 }
-                sessionRemoveList.value?.forEach { session ->
+                _sessionRemoveList.value?.forEach { session ->
                     dataSource.deleteSession(session)
                 }
+                getSessions()
+                _setAlarm.value = currentLesson.value
             }
         } else {
             viewModelScope.launch {
@@ -249,12 +263,13 @@ class NewLessonViewModel(
                         dataSource.insertSession(session)
                     }
                 }
-                sessionRemoveList.value?.forEach { session ->
+                _sessionRemoveList.value?.forEach { session ->
                     dataSource.deleteSession(session)
                 }
+                getSessions()
+                _setAlarm.value = currentLesson.value
             }
         }
-        _navigateToLessonFragment.value = dayId
     }
 
     fun onTeacherMenuClicked() {

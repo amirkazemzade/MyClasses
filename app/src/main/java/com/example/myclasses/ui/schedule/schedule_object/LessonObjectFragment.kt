@@ -56,6 +56,6 @@ class LessonObjectFragment(private val position: Int) : Fragment() {
 
     // gets shared preferences and returns it
     private fun getPreferences(): SharedPreferences {
-        return activity?.getPreferences(Context.MODE_PRIVATE)!!
+        return activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
     }
 }

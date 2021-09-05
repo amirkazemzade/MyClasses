@@ -71,6 +71,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun getPreferences(): SharedPreferences {
-        return activity?.getPreferences(Context.MODE_PRIVATE)!!
+        return activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
     }
 }
