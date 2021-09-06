@@ -26,7 +26,7 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
         get() = _currentSessions
 
     // list of sessions that should be removed
-    private var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
+    var sessionRemoveList = MutableLiveData<MutableList<Session>>(mutableListOf())
 
     // teacher of current lesson
     private val _currentTeacher = MutableLiveData<Teacher?>(null)
@@ -48,6 +48,10 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
     val pictureList: LiveData<List<String>>
         get() = _pictureList
 
+    private var _setAlarm = MutableLiveData<Lesson?>()
+    val setAlarm: LiveData<Lesson?>
+        get() = _setAlarm
+
     // weather to navigate to LessonFragment or not and it's arg value
     private var _navigateUp = MutableLiveData<Boolean?>()
     val navigateUp: LiveData<Boolean?>
@@ -67,12 +71,16 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
     // gets Sessions of this Lesson
     fun getSessions() {
         viewModelScope.launch {
-            _currentSessions.value =
-                currentLesson.value?.lessonId?.let {
-                    dataSource.getSessions(it)
-                }
-            addNewSession()
+            getSessionsFromDatabase()
         }
+    }
+
+    private suspend fun getSessionsFromDatabase() {
+        _currentSessions.value =
+            currentLesson.value?.lessonId?.let {
+                dataSource.getSessions(it)
+            }
+        addNewSession()
     }
 
     // gets the teacher with the given name
@@ -133,9 +141,17 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
         }
     }
 
+    fun onNavigateUp() {
+        _navigateUp.value = true
+    }
+
     // resets value of navigation after navigation has done
     fun doneNavigatingUp() {
         _navigateUp.value = null
+    }
+
+    fun doneSettingAlarm() {
+        _setAlarm.value = null
     }
 
     // sets list of available images for lesson image
@@ -195,7 +211,8 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
             sessionRemoveList.value?.forEach { session ->
                 dataSource.deleteSession(session)
             }
-            _navigateUp.value = true
+            getSessionsFromDatabase()
+            _setAlarm.value = currentLesson.value
         }
 
     }

@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myclasses.database.Settings
 import com.example.myclasses.databinding.ActivityMainBinding
+import com.example.myclasses.ui.lesson.list.LessonListFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 
@@ -50,6 +51,16 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val moveToLesson = intent.getBooleanExtra("move_to_lesson", false)
+        if (moveToLesson){
+            val lessonId = intent.getLongExtra("lesson_id", 0)
+            navController.navigateUp()
+            val args = Bundle()
+            args.putLong("lessonId", lessonId)
+            navController.navigate(R.id.lessonDetailsFragment, args)
+        }
+
 
         createNotificationChannel()
     }

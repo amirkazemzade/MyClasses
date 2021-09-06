@@ -11,14 +11,18 @@ import com.example.myclasses.R
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val clickIntent = Intent(context, MainActivity::class.java)
         intent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-        val pendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0)
 
         val sessionId = intent?.getLongExtra("session_id", 0)
         val lessonId = intent?.getLongExtra("lesson_id", 0)
         val lessonName = intent?.getStringExtra("lesson_name")
+
+        val clickIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra("move_to_lesson", true)
+            putExtra("lesson_id", lessonId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0)
 
         context?.let { myContext ->
             val notification = NotificationCompat.Builder(
