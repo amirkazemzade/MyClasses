@@ -15,7 +15,7 @@ import com.example.myclasses.ui.schedule.SessionClickListener
 import com.example.myclasses.ui.schedule.SessionsListAdapter
 import com.example.myclasses.ui.schedule.schedule_collection.LessonCollectionFragmentDirections
 
-class LessonObjectFragment(private val position: Int) : Fragment() {
+class LessonObjectFragment(private val position: Int = -1) : Fragment() {
     private lateinit var binding: FragmentSessionsOfDayBinding
 
     private lateinit var viewModel: LessonObjectViewModel

@@ -95,7 +95,7 @@ class NewLessonViewModel(
     private suspend fun insertTeacher() {
         _currentTeacher.value?.let { teacher ->
             dataSource.insertTeacher(teacher)
-            getTeacher(teacher.name)
+            getTeacherFromDatabase(teacher.name)
         }
     }
 
@@ -142,11 +142,15 @@ class NewLessonViewModel(
     // gets the teacher with the given name
     fun getTeacher(name: String) {
         viewModelScope.launch {
-            val teacher = dataSource.getTeacher(name)
-            if (!wasTeacherNull || teacher != null)
-                _currentTeacher.value = teacher
-            wasTeacherNull = teacher == null
+            getTeacherFromDatabase(name)
         }
+    }
+
+    private suspend fun getTeacherFromDatabase(name: String) {
+        val teacher = dataSource.getTeacher(name)
+        if (!wasTeacherNull || teacher != null)
+            _currentTeacher.value = teacher
+        wasTeacherNull = teacher == null
     }
 
     // adds a new session to list of sessions

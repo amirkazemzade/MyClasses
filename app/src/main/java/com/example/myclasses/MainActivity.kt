@@ -3,20 +3,20 @@ package com.example.myclasses
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.SharedPreferences
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import com.google.android.material.navigation.NavigationView
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.example.myclasses.database.Settings
 import com.example.myclasses.databinding.ActivityMainBinding
-import com.example.myclasses.ui.lesson.list.LessonListFragmentDirections
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +31,12 @@ class MainActivity : AppCompatActivity() {
         pref = getSharedPreferences("settings", MODE_PRIVATE)
         settings = Settings(pref)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        try {
+            binding = ActivityMainBinding.inflate(layoutInflater)
+        } catch (e: Exception){
+            Log.e("inflateProb", "onCreateView", e)
+            throw e
+        }
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
@@ -61,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.lessonDetailsFragment, args)
         }
 
-
         createNotificationChannel()
     }
 
@@ -82,12 +86,6 @@ class MainActivity : AppCompatActivity() {
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
