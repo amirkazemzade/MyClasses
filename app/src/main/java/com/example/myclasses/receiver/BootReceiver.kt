@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.database.Settings
 import com.example.myclasses.getNextSessionInMilli
@@ -21,7 +20,6 @@ class BootReceiver : BroadcastReceiver() {
                 runBlocking {
                     val dataSource = LessonsDatabase.getInstance(context).lessonsDatabaseDao
                     val sessionsWithLesson = dataSource.getSessions()
-                    Log.i("test4R", "session size: ${sessionsWithLesson.size}")
                     sessionsWithLesson.forEach { SWL ->
                         val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
                             putExtra("session_id", SWL.session.sessionId)
@@ -30,7 +28,7 @@ class BootReceiver : BroadcastReceiver() {
                         }
                         val pendingIntent = PendingIntent.getBroadcast(
                             context,
-                            SWL.session.sessionId.toInt(),
+                            SWL.session.sessionId,
                             alarmIntent,
                             0
                         )

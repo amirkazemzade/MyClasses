@@ -100,8 +100,8 @@ class EditLessonFragment : Fragment() {
                 }
 
                 binding.teacherPhoneInputLayout.let {
-                    if (teacher.phoneNumber != -1) {
-                        it.editText?.setText(teacher.phoneNumber.toString())
+                    if (teacher.phoneNumber != "") {
+                        it.editText?.setText(teacher.phoneNumber)
                         it.visibility = View.VISIBLE
                     } else
                         it.editText?.setText("")
@@ -204,7 +204,11 @@ class EditLessonFragment : Fragment() {
                 val settings =
                     Settings(activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!)
                 viewModel.currentSessions.value?.forEach { session ->
-                    if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.sessionId >= 0) {
+                    if (session.startHour >= 0 && session.startMin >= 0
+                        && session.endHour >= 0 && session.endMin >= 0
+                        && session.weekState >= 0 && session.dayOfWeek >= 1
+                        && session.sessionId >= 0
+                    ) {
                         val intent = Intent(context, AlarmReceiver::class.java).apply {
                             putExtra("session_id", session.sessionId)
                             putExtra("lesson_id", lesson.lessonId)
@@ -212,7 +216,7 @@ class EditLessonFragment : Fragment() {
                         }
                         val pendingIntent = PendingIntent.getBroadcast(
                             context,
-                            session.sessionId.toInt(),
+                            session.sessionId,
                             intent,
                             0
                         )
@@ -234,7 +238,7 @@ class EditLessonFragment : Fragment() {
                     }
                     val pendingIntent = PendingIntent.getBroadcast(
                         context,
-                        session.sessionId.toInt(),
+                        session.sessionId,
                         intent,
                         0
                     )
@@ -291,13 +295,7 @@ class EditLessonFragment : Fragment() {
         val des = binding.description.editText?.text.toString()
         val teacherName = binding.teacherNameInputLayout.editText?.text.toString()
         val teacherEmail = binding.teacherEmailInputLayout.editText?.text.toString()
-        val teacherPhoneText = binding.teacherPhoneInputLayout.editText?.text.toString()
-        val teacherPhone =
-            try {
-                teacherPhoneText.toInt()
-            } catch (e: Exception) {
-                -1
-            }
+        val teacherPhone = binding.teacherPhoneInputLayout.editText?.text.toString()
         val teacherAddress = binding.teacherAddressInputLayout.editText?.text.toString()
         val teacherWebsite = binding.teacherWebsiteInputLayout.editText?.text.toString()
         val teacher =

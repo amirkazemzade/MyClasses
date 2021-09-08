@@ -10,7 +10,7 @@ import com.example.myclasses.database.entities.Session
 import com.example.myclasses.database.entities.Teacher
 import kotlinx.coroutines.launch
 
-class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : ViewModel() {
+class EditLessonViewModel(lessonId: Int, val dataSource: LessonsDatabaseDao) : ViewModel() {
 
     // list of all teachers
     val teachers = dataSource.getTeachers()
@@ -62,7 +62,7 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
     }
 
     // gets Lesson object with its id
-    private fun getLesson(id: Long) {
+    private fun getLesson(id: Int) {
         viewModelScope.launch {
             _currentLesson = dataSource.getLesson(id)
         }
@@ -106,7 +106,7 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
     fun addNewSession() {
         val sessions = currentSessions.value as MutableList
         val lessonId = currentLesson.value?.lessonId!!
-        sessions.add(Session(0, -1, -1, -1, -1, lessonId))
+        sessions.add(Session(lessonId = lessonId))
         _currentSessions.value = sessions
     }
 
@@ -198,11 +198,15 @@ class EditLessonViewModel(lessonId: Long, val dataSource: LessonsDatabaseDao) : 
             } else {
                 _currentTeacher.value = null
             }
-            val teacherId = _currentTeacher.value?.teacherId ?: -1L
+            val teacherId = _currentTeacher.value?.teacherId ?: -1
             currentLesson.value?.teacherId = teacherId
             currentLesson.value?.let { updateLesson(it) }
             currentSessions.value?.forEach { session ->
-                if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.lessonId >= 0) {
+                if (session.startHour >= 0 && session.startMin >= 0
+                    && session.endHour >= 0 && session.endMin >= 0
+                    && session.weekState >= 0 && session.dayOfWeek >= 1
+                    && session.lessonId >= 0
+                ) {
                     dataSource.insertSession(session)
                 } else {
                     dataSource.deleteSession(session)

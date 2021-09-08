@@ -49,8 +49,8 @@ class TeacherDetailsFragment : Fragment() {
                     binding.emailCardView.visibility = View.VISIBLE
                 } else binding.emailCardView.visibility = View.GONE
 
-                if (teacher.phoneNumber != -1) {
-                    binding.phone.text = teacher.phoneNumber.toString()
+                if (teacher.phoneNumber != "") {
+                    binding.phone.text = teacher.phoneNumber
                     binding.phoneCardView.visibility = View.VISIBLE
                 } else binding.phoneCardView.visibility = View.GONE
 

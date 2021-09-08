@@ -13,8 +13,8 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         intent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        val sessionId = intent?.getLongExtra("session_id", 0)
-        val lessonId = intent?.getLongExtra("lesson_id", 0)
+        val sessionId = intent?.getIntExtra("session_id", 0)
+        val lessonId = intent?.getIntExtra("lesson_id", 0)
         val lessonName = intent?.getStringExtra("lesson_name")
 
         val clickIntent = Intent(context, MainActivity::class.java).apply {
@@ -22,6 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
             putExtra("lesson_id", lessonId)
         }
 
+        // TODO add flag for pending intent
         val pendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0)
 
         context?.let { myContext ->
@@ -38,7 +39,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build()
             val notificationManager = NotificationManagerCompat.from(myContext)
-            notificationManager.notify((sessionId?.toInt()!!), notification)
+            notificationManager.notify((sessionId!!), notification)
         }
     }
 }

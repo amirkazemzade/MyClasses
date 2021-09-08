@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "teacher_table")
 data class Teacher(
     @PrimaryKey(autoGenerate = true)
-    val teacherId: Long = 0L,
+    val teacherId: Int = 0,
 
     @ColumnInfo(name = "teacher_name")
     var name: String,
@@ -16,7 +16,7 @@ data class Teacher(
     var email: String = "",
 
     @ColumnInfo(name = "teacher_phone_number")
-    var phoneNumber: Int = -1,
+    var phoneNumber: String = "",
 
     @ColumnInfo(name = "teacher_address")
     var address: String = "",

@@ -9,14 +9,18 @@ import com.example.myclasses.database.entities.Teacher
 import java.text.DateFormat
 import java.util.*
 
-fun convertTimeInLongToFormatted(startTime: Long, endTime: Long): String {
-    val startCalendar = Calendar.getInstance()
-    startCalendar.timeInMillis = startTime
+fun convertTimeInLongToFormatted(session: Session): String {
+    val startCalendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, session.startHour)
+        set(Calendar.MINUTE, session.startMin)
+    }
     val startTimeString =
         DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(startCalendar.timeInMillis))
 
-    val endCalendar = Calendar.getInstance()
-    endCalendar.timeInMillis = endTime
+    val endCalendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, session.endHour)
+        set(Calendar.MINUTE, session.endMin)
+    }
     val endTimeString =
         DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(endCalendar.timeInMillis))
 
@@ -46,7 +50,7 @@ fun convertLessonToStringForShare(
             else -> "Every Week"
         }
         val day = res.getStringArray(R.array.days_of_week_long)[session.dayOfWeek - 1]
-        val time = convertTimeInLongToFormatted(session.startTime, session.endTime)
+        val time = convertTimeInLongToFormatted(session)
         text += "\n\nSession${sessionId++}:\n" +
                 weekState +
                 "\nOn ${day}s\n" +
@@ -58,7 +62,7 @@ fun convertLessonToStringForShare(
 fun convertTeacherToStringForShare(teacher: Teacher): String {
     var text = "Teacher Name: ${teacher.name}\n"
     if (teacher.email != "") text += "Email: ${teacher.email}\n"
-    if (teacher.phoneNumber != -1) text += "Phone: ${teacher.phoneNumber}\n"
+    if (teacher.phoneNumber != "") text += "Phone: ${teacher.phoneNumber}\n"
     if (teacher.address != "") text += "Address: ${teacher.address}\n"
     if (teacher.websiteAddress != "") text += "Website: ${teacher.websiteAddress}\n"
 
@@ -72,7 +76,10 @@ fun AutoCompleteTextView.select(position: Int) {
 
 fun Session.getNextSessionInMilli(settings: Settings): Long {
     val today = Calendar.getInstance()
-    val startCal = Calendar.getInstance().apply { timeInMillis = startTime }
+    val startCal = Calendar.getInstance().apply {
+        set(Calendar.DAY_OF_WEEK, startHour)
+        set(Calendar.MINUTE, startMin)
+    }
     val calendar = Calendar.getInstance().apply {
         firstDayOfWeek = settings.firstDayOfWeek
         set(Calendar.DAY_OF_WEEK, dayOfWeek)

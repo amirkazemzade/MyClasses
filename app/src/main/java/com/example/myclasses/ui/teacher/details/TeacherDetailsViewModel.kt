@@ -9,7 +9,7 @@ import com.example.myclasses.database.entities.Teacher
 import kotlinx.coroutines.launch
 
 class TeacherDetailsViewModel(
-    private val teacherId: Long,
+    private val teacherId: Int,
     private val dataSource: LessonsDatabaseDao
 ) : ViewModel() {
 

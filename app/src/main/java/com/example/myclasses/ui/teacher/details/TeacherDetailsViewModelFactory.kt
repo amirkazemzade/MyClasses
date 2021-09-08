@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.database.LessonsDatabaseDao
 
 class TeacherDetailsViewModelFactory(
-    private val teacherId: Long,
+    private val teacherId: Int,
     private val dataSource: LessonsDatabaseDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

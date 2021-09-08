@@ -12,7 +12,6 @@ import com.example.myclasses.R
 import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.database.entities.Teacher
 import com.example.myclasses.databinding.FragmentNewTeacherBinding
-import java.lang.Exception
 
 class NewTeacherFragment : Fragment() {
     private lateinit var binding: FragmentNewTeacherBinding
@@ -65,12 +64,7 @@ class NewTeacherFragment : Fragment() {
                 binding.teacherWebsiteInputLayout.editText?.setText("")
             } else {
                 binding.teacherEmailInputLayout.editText?.setText(teacher.email)
-                teacher.phoneNumber.let {
-                    if (it != -1)
-                        binding.teacherPhoneInputLayout.editText?.setText(it.toString())
-                    else
-                        binding.teacherPhoneInputLayout.editText?.setText("")
-                }
+                binding.teacherPhoneInputLayout.editText?.setText(teacher.phoneNumber)
                 binding.teacherAddressInputLayout.editText?.setText(teacher.address)
                 binding.teacherWebsiteInputLayout.editText?.setText(teacher.websiteAddress)
             }
@@ -119,12 +113,7 @@ class NewTeacherFragment : Fragment() {
     private fun onSaveButton() {
         val name = binding.teacherNameInputLayout.editText?.text.toString()
         val email = binding.teacherEmailInputLayout.editText?.text.toString()
-        val phoneText = binding.teacherPhoneInputLayout.editText?.text.toString()
-        val phone = try {
-            phoneText.toInt()
-        } catch (e: Exception) {
-            -1
-        }
+        val phone = binding.teacherPhoneInputLayout.editText?.text.toString()
         val address = binding.teacherAddressInputLayout.editText?.text.toString()
         val website = binding.teacherWebsiteInputLayout.editText?.text.toString()
         if (name == "") {

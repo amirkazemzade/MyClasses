@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.myclasses.R
 import com.example.myclasses.database.Settings
 import java.util.*
+
 class ScheduleCollectionViewModel(
     moveToDay: Int,
     preferences: SharedPreferences,

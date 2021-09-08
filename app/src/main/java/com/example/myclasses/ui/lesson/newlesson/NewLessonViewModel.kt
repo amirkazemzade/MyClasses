@@ -129,7 +129,7 @@ class NewLessonViewModel(
     // gets saved teacher of current lesson from database
     private suspend fun getTeacherOfLesson() {
         if (!wasLessonNull || currentLesson.value != null) {
-            if (currentLesson.value != null && currentLesson.value?.teacherId != -1L) {
+            if (currentLesson.value != null && currentLesson.value?.teacherId != -1) {
                 currentLesson.value?.teacherId?.let { id ->
                     _currentTeacher.value = dataSource.getTeacher(id)
                 }
@@ -157,7 +157,7 @@ class NewLessonViewModel(
     fun addNewSession() {
         val sessions = currentSessions.value as MutableList
         val lessonId = if (currentLesson.value != null) currentLesson.value?.lessonId!! else 0
-        sessions.add(Session(0, -1, -1, -1, -1, lessonId))
+        sessions.add(Session(lessonId = lessonId))
         _currentSessions.value = sessions
     }
 
@@ -230,7 +230,7 @@ class NewLessonViewModel(
                 } else {
                     _currentTeacher.value = null
                 }
-                val teacherId = _currentTeacher.value?.teacherId ?: -1L
+                val teacherId = _currentTeacher.value?.teacherId ?: -1
                 _currentLesson.value = Lesson(0, lessonName, imageName.value!!, des, teacherId)
                 currentLesson.value?.let {
                     insertLesson(it)
@@ -238,7 +238,11 @@ class NewLessonViewModel(
                     updateSessionsList()
                 }
                 currentSessions.value?.forEach { session ->
-                    if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.lessonId >= 1) {
+                    if (session.startHour >= 0 && session.startMin >= 0
+                        && session.endHour >= 0 && session.endMin >= 0
+                        && session.weekState >= 0 && session.dayOfWeek >= 1
+                        && session.lessonId >= 1
+                    ) {
                         dataSource.insertSession(session)
                     }
                 }
@@ -257,13 +261,17 @@ class NewLessonViewModel(
                 } else {
                     _currentTeacher.value = null
                 }
-                val teacherId = _currentTeacher.value?.teacherId ?: -1L
+                val teacherId = _currentTeacher.value?.teacherId ?: -1
                 currentLesson.value?.teacherId = teacherId
                 currentLesson.value?.imageName = imageName.value.toString()
                 currentLesson.value?.description = des
                 currentLesson.value?.let { updateLesson(it) }
                 currentSessions.value?.forEach { session ->
-                    if (session.startTime >= 0 && session.endTime >= 0 && session.weekState >= 0 && session.dayOfWeek >= 1 && session.sessionId >= 0) {
+                    if (session.startHour >= 0 && session.startMin >= 0
+                        && session.endHour >= 0 && session.endMin >= 0
+                        && session.weekState >= 0 && session.dayOfWeek >= 1
+                        && session.sessionId >= 0
+                    ) {
                         dataSource.insertSession(session)
                     }
                 }

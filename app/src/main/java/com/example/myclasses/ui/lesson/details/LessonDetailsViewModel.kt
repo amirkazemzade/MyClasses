@@ -11,7 +11,7 @@ import com.example.myclasses.database.entities.Teacher
 import kotlinx.coroutines.launch
 
 class LessonDetailsViewModel(
-    private val lessonId: Long,
+    private val lessonId: Int,
     private val dataSource: LessonsDatabaseDao
 ) :
     ViewModel() {
@@ -62,17 +62,17 @@ class LessonDetailsViewModel(
         }
     }
 
-    private fun getLesson(id: Long?) {
+    private fun getLesson(id: Int?) {
         id?.let {
             _lesson = dataSource.getLesson(it)
         }
     }
 
-    private suspend fun getSessions(lessonId: Long) {
+    private suspend fun getSessions(lessonId: Int) {
         _sessions.value = dataSource.getSessions(lessonId)
     }
 
-    private suspend fun getTeacher(teacherId: Long) {
+    private suspend fun getTeacher(teacherId: Int) {
         _teacher.value = dataSource.getTeacher(teacherId)
     }
 

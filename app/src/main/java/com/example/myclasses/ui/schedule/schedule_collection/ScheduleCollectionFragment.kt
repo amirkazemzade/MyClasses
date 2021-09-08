@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.myclasses.R
-import com.example.myclasses.database.LessonsDatabase
 import com.example.myclasses.databinding.FragmentScheduleBinding
 import com.example.myclasses.ui.schedule.schedule_object.LessonObjectFragment
 import com.google.android.material.tabs.TabLayout
@@ -35,14 +34,12 @@ class LessonCollectionFragment : Fragment() {
     ): View {
         val application = requireNotNull(this.activity).application
         val arguments = LessonCollectionFragmentArgs.fromBundle(requireArguments())
-        val dataSource = LessonsDatabase.getInstance(application).lessonsDatabaseDao
 
         viewModelFactory =
             LessonCollectionViewModelFactory(
                 arguments.currentTabId,
                 getPreferences(),
-                application,
-                dataSource
+                application
             )
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ScheduleCollectionViewModel::class.java)

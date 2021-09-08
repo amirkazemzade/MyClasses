@@ -1,7 +1,5 @@
 package com.example.myclasses.ui.lesson.newlesson
 
-import android.app.AlarmManager
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myclasses.database.LessonsDatabaseDao

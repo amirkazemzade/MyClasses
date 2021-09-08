@@ -10,7 +10,7 @@ import com.example.myclasses.database.entities.Teacher
 
 @Database(
     entities = [Lesson::class, Session::class, Teacher::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class LessonsDatabase : RoomDatabase() {

@@ -44,8 +44,7 @@ class EditTeacherFragment : Fragment() {
             it?.let { teacher ->
                 binding.teacherNameInputLayout.editText?.setText(teacher.name)
                 binding.teacherEmailInputLayout.editText?.setText(teacher.email)
-                if (teacher.phoneNumber != -1)
-                    binding.teacherPhoneInputLayout.editText?.setText(teacher.phoneNumber.toString())
+                binding.teacherPhoneInputLayout.editText?.setText(teacher.phoneNumber)
                 binding.teacherAddressInputLayout.editText?.setText(teacher.address)
                 binding.teacherWebsiteInputLayout.editText?.setText(teacher.websiteAddress)
             }
@@ -108,12 +107,7 @@ class EditTeacherFragment : Fragment() {
     private fun onSaveButton() {
         val name = binding.teacherNameInputLayout.editText?.text.toString()
         val email = binding.teacherEmailInputLayout.editText?.text.toString()
-        val phoneText = binding.teacherPhoneInputLayout.editText?.text.toString()
-        val phone = try {
-            phoneText.toInt()
-        } catch (e: Exception) {
-            -1
-        }
+        val phone = binding.teacherPhoneInputLayout.editText?.text.toString()
         val address = binding.teacherAddressInputLayout.editText?.text.toString()
         val website = binding.teacherWebsiteInputLayout.editText?.text.toString()
         if (name == "") {

@@ -3,7 +3,6 @@ package com.example.myclasses
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.SharedPreferences
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             binding = ActivityMainBinding.inflate(layoutInflater)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("inflateProb", "onCreateView", e)
             throw e
         }
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val moveToLesson = intent.getBooleanExtra("move_to_lesson", false)
-        if (moveToLesson){
+        if (moveToLesson) {
             val lessonId = intent.getLongExtra("lesson_id", 0)
             navController.navigateUp()
             val args = Bundle()

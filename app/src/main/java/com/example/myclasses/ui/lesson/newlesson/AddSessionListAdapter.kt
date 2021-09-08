@@ -44,7 +44,7 @@ class AddSessionListAdapter(private val clickListener: SessionDeleteClickListene
             binding.sessionName.text =
                 context.resources.getString(R.string.session_name, position + 1)
 
-            binding.deleteSession.setOnClickListener{
+            binding.deleteSession.setOnClickListener {
                 clickListener.onClick(item)
             }
 
@@ -96,14 +96,16 @@ class AddSessionListAdapter(private val clickListener: SessionDeleteClickListene
 
 
             // Setting Session Values
-            if (item.startTime >= 0) {
+            if (item.startHour >= 0 && item.startMin >= 0) {
                 binding.dayOfWeekDropMenu.select(item.dayOfWeek - 1)
                 binding.weekStateDropMenu.select(item.weekState)
-                startCalendar.value = Calendar.getInstance().also { cal ->
-                    cal.timeInMillis = item.startTime
+                startCalendar.value = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, item.startHour)
+                    set(Calendar.MINUTE, item.startMin)
                 }
-                endCalendar.value = Calendar.getInstance().also { cal ->
-                    cal.timeInMillis = item.endTime
+                endCalendar.value = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, item.endHour)
+                    set(Calendar.MINUTE, item.endMin)
                 }
             }
 
@@ -127,7 +129,8 @@ class AddSessionListAdapter(private val clickListener: SessionDeleteClickListene
             }
             startCalendar.value?.set(Calendar.HOUR_OF_DAY, hourOfDay)
             startCalendar.value?.set(Calendar.MINUTE, minute)
-            item.startTime = startCalendar.value?.timeInMillis!!
+            item.startHour = hourOfDay
+            item.startMin = minute
         }
 
         private fun setEndTime(hourOfDay: Int, minute: Int, item: Session) {
@@ -139,7 +142,8 @@ class AddSessionListAdapter(private val clickListener: SessionDeleteClickListene
             }
             endCalendar.value?.set(Calendar.HOUR_OF_DAY, hourOfDay)
             endCalendar.value?.set(Calendar.MINUTE, minute)
-            item.endTime = endCalendar.value?.timeInMillis!!
+            item.endHour = hourOfDay
+            item.endMin = minute
         }
     }
 
@@ -157,6 +161,6 @@ class SessionDiffCallBack : DiffUtil.ItemCallback<Session>() {
 
 }
 
-class SessionDeleteClickListener(val clickListener: (session: Session) -> Unit){
+class SessionDeleteClickListener(val clickListener: (session: Session) -> Unit) {
     fun onClick(session: Session) = clickListener(session)
 }

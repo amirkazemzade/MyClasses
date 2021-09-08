@@ -66,7 +66,7 @@
         tools:layout="@layout/fragment_lesson_details">
         <argument
             android:name="lessonId"
-            app:argType="long" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_lessonDetailsFragment_to_editLessonFragment"
             app:destination="@id/editLessonFragment" />
@@ -81,7 +81,7 @@
         tools:layout="@layout/fragment_edit_lesson">
         <argument
             android:name="lessonId"
-            app:argType="long" />
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/lessonListFragment"
@@ -114,7 +114,7 @@
         tools:layout="@layout/fragment_teacher_details">
         <argument
             android:name="teacherId"
-            app:argType="long" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_teacherDetailsFragment_to_editTeacherFragment"
             app:destination="@id/editTeacherFragment" />
@@ -131,7 +131,7 @@
         tools:layout="@layout/fragment_edit_teacher">
         <argument
             android:name="teacherId"
-            app:argType="long" />
+            app:argType="integer" />
     </fragment>
 
 </navigation>

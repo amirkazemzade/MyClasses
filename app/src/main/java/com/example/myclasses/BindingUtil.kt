@@ -9,6 +9,7 @@ import com.example.myclasses.database.entities.Lesson
 import com.example.myclasses.database.entities.Session
 import com.example.myclasses.database.entities.Teacher
 import java.text.DateFormat
+import java.util.*
 
 @BindingAdapter("lessonIcon")
 fun ImageView.setLessonIcon(item: Lesson?) {
@@ -26,7 +27,7 @@ fun ImageView.setLessonIcon(item: Lesson?) {
 @BindingAdapter("timeFormatted")
 fun TextView.setTimeFormatted(item: Session?) {
     item?.let {
-        text = convertTimeInLongToFormatted(item.startTime, item.endTime)
+        text = convertTimeInLongToFormatted(item)
     }
 }
 
@@ -41,8 +42,12 @@ fun ImageView.setPictureIcon(pictureName: String?) {
 @BindingAdapter("startTimeAsString")
 fun TextView.setStartTime(item: Session?) {
     item?.let {
-        if (item.startTime >= 0) {
-            text = DateFormat.getTimeInstance(DateFormat.SHORT).format(item.startTime)
+        if (item.startHour >= 0 && item.startMin >= 0) {
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, item.startHour)
+                set(Calendar.MINUTE, item.startMin)
+            }
+            text = DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.timeInMillis)
         }
     }
 }
@@ -50,8 +55,12 @@ fun TextView.setStartTime(item: Session?) {
 @BindingAdapter("endTimeAsString")
 fun TextView.setEndTime(item: Session?) {
     item?.let {
-        if (item.endTime >= 0) {
-            text = DateFormat.getTimeInstance(DateFormat.SHORT).format(item.endTime)
+        if (item.endHour >= 0 && item.endMin >= 0) {
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, item.endHour)
+                set(Calendar.MINUTE, item.endMin)
+            }
+            text = DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.timeInMillis)
         }
     }
 }

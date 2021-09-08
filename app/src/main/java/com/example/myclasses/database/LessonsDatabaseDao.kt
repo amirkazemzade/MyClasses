@@ -32,7 +32,7 @@ interface LessonsDatabaseDao {
     fun getLessons(): LiveData<List<LessonWithSessions>>
 
     @Query("SELECT * FROM lessons_table WHERE teacher_id = :teacherId")
-    suspend fun getLessons(teacherId: Long): List<Lesson>
+    suspend fun getLessons(teacherId: Int): List<Lesson>
 
     @Query("SELECT * FROM teacher_table")
     fun getTeachers(): LiveData<List<Teacher>>
@@ -45,19 +45,19 @@ interface LessonsDatabaseDao {
     suspend fun getLesson(lessonName: String): Lesson?
 
     @Query("SELECT * FROM lessons_table WHERE lessonId = :id")
-    fun getLesson(id: Long): LiveData<Lesson>
+    fun getLesson(id: Int): LiveData<Lesson>
 
     @Query("SELECT * FROM session_table WHERE lesson_id = :lessonId")
-    suspend fun getSessions(lessonId: Long): List<Session>
+    suspend fun getSessions(lessonId: Int): List<Session>
 
     @Query("SELECT * FROM session_table")
     suspend fun getSessions(): List<SessionWithLesson>
 
     @Query("SELECT * FROM teacher_table WHERE teacherId = :teacherId")
-    suspend fun getTeacher(teacherId: Long): Teacher?
+    suspend fun getTeacher(teacherId: Int): Teacher?
 
     @Query("SELECT * FROM teacher_table WHERE teacherId = :teacherId")
-    fun getTeacherAsLiveData(teacherId: Long): LiveData<Teacher>
+    fun getTeacherAsLiveData(teacherId: Int): LiveData<Teacher>
 
     @Query("SELECT * FROM teacher_table WHERE teacher_name = :teacherName")
     suspend fun getTeacher(teacherName: String): Teacher?
@@ -67,7 +67,7 @@ interface LessonsDatabaseDao {
     fun getLessonWithSessions(lessonName: String): LiveData<LessonWithSessions>
 
     @Transaction
-    @Query("SELECT * FROM session_table WHERE day_of_week = :day AND (week_state = :state OR week_state = 0) ORDER BY start_time ASC")
+    @Query("SELECT * FROM session_table WHERE day_of_week = :day AND (week_state = :state OR week_state = 0) ORDER BY start_hour ASC, start_min ASC")
     fun getSessionsOfDay(day: Int, state: Int): LiveData<List<SessionLessonTeacher>>
 
     @Delete
