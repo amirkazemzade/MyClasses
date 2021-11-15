@@ -1,5 +1,6 @@
 package com.example.myclasses.receiver
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -16,6 +17,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val sessionId = intent?.getIntExtra("session_id", 0)
         val lessonId = intent?.getIntExtra("lesson_id", 0)
         val lessonName = intent?.getStringExtra("lesson_name")
+
+        val time = intent?.getLongExtra("time", 0)
+        val interval = intent?.getLongExtra("interval", 0)
+        val nextTime = interval?.let { time?.plus(it) }
 
         val clickIntent = Intent(context, MainActivity::class.java).apply {
             putExtra("move_to_lesson", true)
@@ -40,6 +45,26 @@ class AlarmReceiver : BroadcastReceiver() {
                 .build()
             val notificationManager = NotificationManagerCompat.from(myContext)
             notificationManager.notify((sessionId!!), notification)
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            val nextIntent = Intent(context, AlarmReceiver::class.java).apply {
+                putExtra("session_id", sessionId)
+                putExtra("lesson_id", lessonId)
+                putExtra("lesson_name", lessonName)
+                putExtra("time", time)
+                putExtra("interval", interval)
+            }
+            val nextPendingIntent = PendingIntent.getBroadcast(
+                context,
+                sessionId,
+                nextIntent,
+                0
+            )
+
+            if (nextTime != null) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextTime, nextPendingIntent)
+            }
         }
     }
 }

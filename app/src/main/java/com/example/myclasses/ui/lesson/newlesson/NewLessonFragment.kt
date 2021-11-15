@@ -208,10 +208,15 @@ class NewLessonFragment : Fragment() {
                         && session.weekState >= 0 && session.dayOfWeek >= 1
                         && session.sessionId >= 0
                     ) {
+                        val time = session.getNextSessionInMilli(settings)
+                        val weekGap = if (session.weekState == 0) 1 else 2
+
                         val intent = Intent(context, AlarmReceiver::class.java).apply {
                             putExtra("session_id", session.sessionId)
                             putExtra("lesson_id", lesson.lessonId)
                             putExtra("lesson_name", lesson.lessonName)
+                            putExtra("time", time)
+                            putExtra("interval", AlarmManager.INTERVAL_DAY * 7 * weekGap)
                         }
                         val pendingIntent = PendingIntent.getBroadcast(
                             context,
@@ -220,11 +225,9 @@ class NewLessonFragment : Fragment() {
                             0
                         )
 
-                        val weekGap = if (session.weekState == 0) 1 else 2
-                        alarmManager.setRepeating(
+                        alarmManager.setExact(
                             AlarmManager.RTC_WAKEUP,
-                            session.getNextSessionInMilli(settings),
-                            AlarmManager.INTERVAL_DAY * 7 * weekGap,
+                            time,
                             pendingIntent
                         )
                     }
